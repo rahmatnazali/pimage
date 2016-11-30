@@ -1,2 +1,5 @@
 # Image-Copy-Move-Detection
-Copy-move forgery detection on digital images using Python Language
+This is a copy-move forgery detection script on digital images using Python Language.
+
+# How to use
+will be written soon
