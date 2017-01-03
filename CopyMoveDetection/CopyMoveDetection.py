@@ -53,6 +53,8 @@ def detect(sourceDir, fileName, destinationDir, blockSize):
         print "Error: Direktori keluaran salah."
         return
 
-    singleImage = ImageObject.ImageObject(sourceDir, fileName, blockSize, destinationDir+'/')
-    singleImage.run()
+
+    singleImage = ImageObject.ImageObject(sourceDir, fileName, blockSize, destinationDir)
+    imageResultPath = singleImage.run()
     print "Selesai."
+    return imageResultPath

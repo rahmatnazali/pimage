@@ -9,8 +9,9 @@ import scipy.misc
 from math import pow
 import numpy as np
 import __builtin__
-import sys
+from tqdm import tqdm, trange
 import time
+from Tkinter import Text, END, INSERT
 
 """
 Import script
@@ -34,7 +35,7 @@ class ImageObject(object):
         """
 
         print imageName
-        print "Step 1: Inisialisasi objek dan variable",
+        print "Step 1/4: Inisialisasi objek dan variable",
 
         # parameter gambar
         self.targetResult = targetResult
@@ -42,13 +43,30 @@ class ImageObject(object):
         self.image = Image.open(imageDir+imageName)
         self.imageWidth, self.imageHeight = self.image.size      # height = vertikal atas bawah, width = horizontal lebar kanan kiri
 
+        if self.image.mode != 'L':
+            self.isRGB = True
+
+            self.image = self.image.convert('RGB')
+            imagePixels = self.image.load()
+            self.imageGrayscale = self.image.convert('L')                 # membuat kanvas grayscale baru dari gambar lama
+            imageGrayscalePixels = self.imageGrayscale.load()
+
+            for y in range(0, self.imageHeight):
+                for x in range(0, self.imageWidth):
+                    tmpR, tmpG, tmpB = imagePixels[x,y]
+                    imageGrayscalePixels[x,y] = int(0.299 * tmpR) + int(0.587 * tmpG) + int(0.114 * tmpB)
+        else:
+            self.isRGB = False
+            self.image = self.image.convert('L')
+
         # parameter algoritma paper 1
         self.N = self.imageWidth * self.imageHeight
         self.blockDimension = blockDimension
         self.b = self.blockDimension * self.blockDimension
         self.Nb = (self.imageWidth-self.blockDimension+1)*(self.imageHeight-self.blockDimension+1)
         self.Nn = 2      # jumlah blok tetangga yang diperiksa
-        self.Nf = 750    # jumlah minimal frekuensi sebuah offset
+        # self.Nf = 750    # jumlah minimal frekuensi sebuah offset
+        self.Nf = 188    # jumlah minimal frekuensi sebuah offset
         self.Nd = 50     # jumlah minimal offset magnitude
 
         # parameter algoritma paper 2
@@ -56,12 +74,14 @@ class ImageObject(object):
         self.t1 = 2.80
         self.t2 = 0.02
 
-        print "total blok: ", self.Nb
+        print self.Nb, self.isRGB
 
         # inisialisasi kontainer untuk menampung data
         self.featureContainer = Container.Container()
         self.pairContainer = Container.Container()
         self.offsetDict = {}
+
+        # logger pada GUI
 
     def run(self):
         """
@@ -76,7 +96,7 @@ class ImageObject(object):
         end2 = time.time()
         self.analyze()
         end3 = time.time()
-        self.reconstruct()
+        imageResultPath = self.reconstruct()
         end4 = time.time()
 
         print "Computing time:", end1-start, "detik"
@@ -89,30 +109,32 @@ class ImageObject(object):
         h, m = divmod(m, 60)
         print "Total time    : %d:%02d:%02d detik" % (h, m, s)
         print ""
+        return imageResultPath
 
     def compute(self):
         """
         Fungsi untuk menghitung karakteristik blok citra
         :return: None
         """
-        print "Step 2: Menghitung fitur karakteristik dan PCA"
-        z = 0
-        for i in range(0, self.imageWidth - self.blockDimension + 1):
-            for j in range(0, self.imageHeight - self.blockDimension + 1):
-                tmpImage = self.image.crop((i, j, i+self.blockDimension, j+self.blockDimension))
-                imageBlock = Blocks.Blocks(tmpImage, i, j, self.blockDimension)
-                self.featureContainer.addBlock(imageBlock.computeBlock())
-                del tmpImage, imageBlock
-                z+=1
-                if z % 100 == 0:
-                    sys.stdout.write("    terhitung: %3d blok\r" % z)
-                    sys.stdout.flush()
+        print "Step 2/4: Menghitung fitur karakteristik"
 
-            #     if z == 2000:
-            #         break
-            # if z == 2000:
-            #     break
-        print "    total blok citra:", z
+        imageWidthOverlap = self.imageWidth - self.blockDimension
+        imageHeightOverlap = self.imageHeight - self.blockDimension
+
+        time.sleep(0.1)
+        if self.isRGB:
+            for i in tqdm(range(0, imageWidthOverlap + 1, 1)):
+                for j in range(0, imageHeightOverlap + 1, 1):
+                    imageBlockRGB = self.image.crop((i, j, i+self.blockDimension, j+self.blockDimension))
+                    imageBlockGrayscale = self.imageGrayscale.crop((i, j, i+self.blockDimension, j+self.blockDimension))
+                    imageBlock = Blocks.Blocks(imageBlockGrayscale, imageBlockRGB, i, j, self.blockDimension)
+                    self.featureContainer.addBlock(imageBlock.computeBlock())
+        else:
+            for i in range(imageWidthOverlap + 1):
+                for j in range(imageHeightOverlap + 1):
+                    imageBlockGrayscale = self.image.crop((i, j, i+self.blockDimension, j+self.blockDimension))
+                    imageBlock = Blocks.Blocks(imageBlockGrayscale, None, i, j, self.blockDimension)
+                    self.featureContainer.addBlock(imageBlock.computeBlock())
 
     def sort(self):
         """
@@ -126,21 +148,18 @@ class ImageObject(object):
         Fungsi untuk melakukan analisa pasangan blok citra
         :return: None
         """
-        print "Step 3: Membuat block pair yang berjarak < Nn"
+        print "Step 3/4: Membuat pasangan blok citra"
         z = 0
-        for i in range(0, self.featureContainer.getLength()):
-            for j in range(i+1, self.featureContainer.getLength()):
+        time.sleep(0.1)
+        featureContainerLength = self.featureContainer.getLength()
+        for i in tqdm(range(featureContainerLength)):
+            for j in range(i+1, featureContainerLength):
                 result = self.isValid(i, j)
                 if result[0]:
                     self.addDict(self.featureContainer.container[i][0], self.featureContainer.container[j][0], result[1])
                     z += 1
                 else:
                     break
-
-                if z % 100 == 0 or i % 100 == 0:
-                    sys.stdout.write("    hasil sementara: %3d blok terperiksa, %3d pasang didapat\r" % (i, z))
-                    sys.stdout.flush()
-        print "    pasangan data yang didapatkan:", z
 
     def isValid(self, i, j):
         """
@@ -193,12 +212,14 @@ class ImageObject(object):
         """
         Fungsi untuk melakukan konstruksi ulang citra dengan menyertakan hasil dugaan deteksi
         """
-        print "Step 10: Reconstructing Image"
+        time.sleep(0.1)
+        print "Step 4/4: Rekonstruksi citra"
 
         # array pembentuk citra hasil
         imageArray = np.zeros((self.imageHeight, self.imageWidth))
-        scale = np.array(self.image)
-        lined = np.array(self.image)
+
+        scale = np.array(self.image.convert('RGB'))
+        lined = np.array(self.image.convert('RGB'))
 
         for key in sorted(self.offsetDict, key=lambda key: __builtin__.len(self.offsetDict[key]), reverse=True):
             if self.offsetDict[key].__len__() < self.Nf*2:
@@ -209,12 +230,6 @@ class ImageObject(object):
                 for j in range(self.offsetDict[key][i][1], self.offsetDict[key][i][1]+self.blockDimension):
                     for k in range(self.offsetDict[key][i][0], self.offsetDict[key][i][0]+self.blockDimension):
                         imageArray[j][k] = 255
-
-        # color scale gambar asli
-        for y in range(0, self.imageWidth):
-            for x in range(0, self.imageHeight):
-                if imageArray[x,y] == 255:
-                    scale[x,y,2] = 255
 
         # lined gambar asli
         for x in range(2, self.imageHeight-2):
@@ -251,7 +266,8 @@ class ImageObject(object):
                     elif imageArray[x+1,y] == 0:
                         lined[x+1:x+3,y,1] = 255
 
-        timestr = time.strftime("%Y%m%d_%H%M%S_")
-        scipy.misc.imsave(self.targetResult+timestr+self.imagePath, imageArray)
-        scipy.misc.imsave(self.targetResult+timestr+"_scale_"+self.imagePath, scale)
+        timestr = time.strftime("%Y%m%d_%H%M%S")
+        scipy.misc.imsave(self.targetResult+timestr+"_"+self.imagePath, imageArray)
         scipy.misc.imsave(self.targetResult+timestr+"_lined_"+self.imagePath, lined)
+
+        return self.targetResult+timestr+"_lined_"+self.imagePath
