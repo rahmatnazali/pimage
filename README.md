@@ -2,7 +2,10 @@
 
 This is a copy-move forgery detection script on digital images using Python Language.
 
-Note: this readme files are template that not yet been edited.
+NOTE: this readme files are just a template and not yet final. Due to busy schedule it is hard for me to finalize this now, please ignore this description and go straight to the code.
+
+
+
 
 ## Getting Started
 
