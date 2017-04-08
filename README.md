@@ -77,7 +77,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-[**Rahmat Nazali Salimi**](https://github.com/PurpleBooth)
+* **Rahmat Nazali Salimi** [LinkedIn](https://www.linkedin.com/in/rahmat-nazali-salimi-43391a13b/)
 
 ## License
 
