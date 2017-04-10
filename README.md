@@ -37,7 +37,7 @@ But you can also modify it, or even make your own python script with the format 
 1. Make sure to import ```CopyMoveDetection``` package
 2. Directly call function ```detect``` or ```detect_dir``` and give the proper parameter
 
-Your scirpt will likely look like so:
+Your scirpt will likely looks like so:
 ```
 import CopyMoveDetection
 
@@ -62,4 +62,4 @@ If _blockSize_ parameter was not given, the default value would be 32 (integer).
 This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE) file for details
 
 ## Acknowledgments
-I mainly learn how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html) written by Jan Erik Solem, but the page has been erased. Shortly after knowing the page was erased, I found that the author are now founder & CEO at [Mapillary](https://www.mapillary.com/) (Hail, and hat tip).
+I mainly learnt how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html) written by Jan Erik Solem, but the page has been erased. Shortly after knowing the page was gone, I found that the author are now founder & CEO at [Mapillary](https://www.mapillary.com/) (Hail, and hat tip).
