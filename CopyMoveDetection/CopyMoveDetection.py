@@ -34,7 +34,7 @@ def detect_dir(sourceDir, destinationDir, blockSize=32):
 
     print "Selesai."
 
-def detect(sourceDir, fileName, destinationDir, blockSize):
+def detect(sourceDir, fileName, destinationDir, blockSize=32):
     """
     Fungsi untuk melakukan deteksi copy-move pada satu citra
     :param sourceDir: direktori citra
