@@ -7,6 +7,13 @@ This script is implemented with a modification of two algoritms publicated in a 
 
 By modify those algorithm, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
 
+## Example of original and forgered image
+### Original image
+![Original image](/screenshot/horse.png?raw=true) 
+### Forgered image
+![Forgered image](/screenshot/horse_blur.png?raw=true)
+
+## GUI
 ![GUI screenshoot](/screenshot/02_home_result.PNG?raw=true)
 
 By default, the script will log entire detection process like so:
