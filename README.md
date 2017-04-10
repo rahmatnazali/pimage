@@ -7,7 +7,7 @@ This script is implemented with a modification of two algoritms publicated in a 
 
 By modify those algorithm, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
 
-![GUI screenshoot](/screenshot/02_result.PNG?raw=true)
+![GUI screenshoot](/screenshot/02_home_result.PNG?raw=true)
 
 By default, the script will log entire detection process like so:
 ![Log screenshoot](/screenshot/03_log.PNG?raw=true)
