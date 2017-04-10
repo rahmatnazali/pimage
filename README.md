@@ -1,57 +1,61 @@
 # Copy-Move Detection on Digital Image using Python
-This is a copy-move forgery detection script on digital images using Python Language.
+This is an implementation of python script to detect a copy-move manipulation attack on digital image based on Overlapping Blocks.
 
-## Features
-### Server side:
-  - Monitor all message's pakcet (sender, reciever, message content)
-  - Real-time list of user online for easier management
-  - Force kick a user by type ```kill [username]```
-![Server screenshoot](/screenshot/06_server_monitoring.PNG?raw=true)
+This script is implemented with a modification of two algoritms publicated in a scientific journals:
+1. Duplication detection algorithm: [Exposing Digital Forgeries by Detecting Duplicated Image Region](www.ists.dartmouth.edu/library/102.pdf); Fast and smooth attack detection algorithm on digital image using [principal component analysys](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and _post region duplication process_ (explained in the paper above)
+2. Robust detection algorithm: [Robust Detection of Region-Duplication Forgery in Digital Image](http://ieeexplore.ieee.org/document/1699948/); Slower, rough attack detection algoritm but are considered robust towards noise and _post region duplication process_
 
-### Client side:
-  - Send any message typed in message box, and it will be broadcasted to all user within the same group
-  - Send private message typed in message box with a format ```@[username] [messages]```, and only both sender and receiver will be able to see the message
-![Server screenshoot](/screenshot/05_client_otherUserJoined.PNG?raw=true)
+By modify those algorithm, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
+
+![GUI screenshoot](/screenshot/02_result.PNG?raw=true)
 
 ## Getting Started
-Make sure you already have [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html) installed.
-- To run: Simply execute the MultiChatGUIServer.jar for the server side, or execute MultiChatGUIClient.jar for the client side
-- To modify: Import the source code to your prefered IDE, compile/build it, and run the JAR executable
+Make sure you already have:
+* [Python 2.7](https://www.python.org/)
+* [Anaconda](http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html)
+
+Also the required python libraries:
+* [Numpy](https://pypi.python.org/pypi/numpy)
+* [SKLearn/scikit-learn](https://pypi.python.org/pypi/scikit-learn/0.18.1)
+* [Python Image Library (PIL)](https://pypi.python.org/pypi/PIL)
+* [Scipy](https://pypi.python.org/pypi/scipy/0.7.0)
+* [tqdm](https://pypi.python.org/pypi/tqdm)
 
 ## Starting
-- Starting server
-  1. Execute MultiChatGUIServer.jar
-  2. Decide the port number to be used and fill it in port label (default port will be 1234)
-  3. Click _Hidupkan_ to turn on the server
-  4. All client's operation will be monitored and printed in server's log message label
-  5. For terminating the service, click _Matikan_
-- Starting client
-  1. Execute MultiChatGUIClient.jar
-  2. Decide the host and fill it in _Host_ label, also the port (default is 1234)
-  3. Input your preferable username. If no username is typed, the system will automatically generate random guest user
-  4. Click _Sambung_ to login to chat network
-  5. Start chatting by typing your message on the message label and click _Kirim_ to send your message
-  5. To quit, simply click quit button or type ``` /quit ``` in the message label
+### Running GUI version
+1. Run [main_GUI.py](/CopyMoveDetection/main_GUI.py)
+2. A new window will apear, click open file and choose your image
+3. Click detect and the detection process will start
+4. After done, the detection result will be written in your CLI, while the result image will be shown in GUI
+### Running CLI version
+By default, you can run it using [main_CLI.py](/CopyMoveDetection/main_CLI.py).
+But you can also modify it, or even make your own python script with the format below:
+1. Make sure to import ```CopyMoveDetection``` package
+2. Directly call function ```detect``` or ```detect_dir``` and give the proper parameter
+
+Your scirpt will likely look like so:
+```
+import CopyMoveDetection
+
+# To detect all images on a single folder, use detect_dir function
+CopyMoveDetection.detect_dir('your/directory/path/', 'your/result/directory/' [, blockSize])
+
+# To detect single image on a certain path, use detect function
+CopyMoveDetection.detect('your/directory/path/', 'your_image.png', 'your/result/directory/' [, blockSize])
+```
+If _blockSize_ parameter was not given, the default value would be 32 (integer).
+
   
 ## Built With
-* [Netbeans 8.2](http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html) - IDE
-* [Java-JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html)
+* [Python 2.7](https://www.python.org/) - Base language
+* [Anaconda 4.3.1](https://www.continuum.io/downloads) - Python data science package
+* [Pycharm 4.5.5](https://confluence.jetbrains.com/display/PYH/Previous+PyCharm+Releases) - IDE
 
 ## Authors
 * **Rahmat Nazali S** - [LinkedIn](https://www.linkedin.com/in/rahmat-nazali-salimi-43391a13b/) - [HackerRank](https://www.hackerrank.com/rahmatNazali)
 
 ## License
-This project is licensed under the GPL License - see the [LICENSE.md](/LICENSE) file for details
-
-## Important note
-This is an implementation of a very simple but well functioned chatting application utilize local network, and so the message was not encrypted at all. This means that implementation for professional use should be avoided, since the messages may be easily sniffed.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE) file for details
 
 ## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+I mainly learn how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html), but the page has been erased. Shortly after knowing the page was erased, I find that the author are now founder & CEO at [Mapilarry](https://www.mapillary.com/) (Hail, and hat tip)
