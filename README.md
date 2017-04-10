@@ -3,7 +3,7 @@ This is an implementation of python script to detect a copy-move manipulation at
 
 This script is implemented with a modification of two algoritms publicated in a scientific journals:
 1. Duplication detection algorithm, taken from [Exposing Digital Forgeries by Detecting Duplicated Image Region](www.ists.dartmouth.edu/library/102.pdf); Fast and smooth attack detection algorithm on digital image using [principal component analysys](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and _post region duplication process_ (explained in the paper above)
-2. Robust detection algorithm, taken from [Robust Detection of Region-Duplication Forgery in Digital Image](http://ieeexplore.ieee.org/document/1699948/); Slower, rough attack detection algoritm but are considered robust towards noise and _post region duplication process_
+2. Robust detection algorithm, taken from [Robust Detection of Region-Duplication Forgery in Digital Image](http://ieeexplore.ieee.org/document/1699948/); Slower and having rough result attack detection algorithm but are considered robust towards noise and _post region duplication process_
 
 By modify those algorithm, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
 
