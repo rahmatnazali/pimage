@@ -2,12 +2,16 @@
 This is an implementation of python script to detect a copy-move manipulation attack on digital image based on Overlapping Blocks.
 
 This script is implemented with a modification of two algoritms publicated in a scientific journals:
-1. Duplication detection algorithm: [Exposing Digital Forgeries by Detecting Duplicated Image Region](www.ists.dartmouth.edu/library/102.pdf); Fast and smooth attack detection algorithm on digital image using [principal component analysys](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and _post region duplication process_ (explained in the paper above)
-2. Robust detection algorithm: [Robust Detection of Region-Duplication Forgery in Digital Image](http://ieeexplore.ieee.org/document/1699948/); Slower, rough attack detection algoritm but are considered robust towards noise and _post region duplication process_
+1. Duplication detection algorithm, taken from [Exposing Digital Forgeries by Detecting Duplicated Image Region](www.ists.dartmouth.edu/library/102.pdf); Fast and smooth attack detection algorithm on digital image using [principal component analysys](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and _post region duplication process_ (explained in the paper above)
+2. Robust detection algorithm, taken from [Robust Detection of Region-Duplication Forgery in Digital Image](http://ieeexplore.ieee.org/document/1699948/); Slower, rough attack detection algoritm but are considered robust towards noise and _post region duplication process_
 
 By modify those algorithm, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
 
 ![GUI screenshoot](/screenshot/02_result.PNG?raw=true)
+
+By default, the script will log entire detection process like so:
+![Log screenshoot](/screenshot/03_log.PNG?raw=true)
+
 
 ## Getting Started
 Make sure you already have:
@@ -58,4 +62,4 @@ If _blockSize_ parameter was not given, the default value would be 32 (integer).
 This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE) file for details
 
 ## Acknowledgments
-I mainly learn how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html), but the page has been erased. Shortly after knowing the page was erased, I find that the author are now founder & CEO at [Mapilarry](https://www.mapillary.com/) (Hail, and hat tip)
+I mainly learn how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html) written by Jan Erik Solem, but the page has been erased. Shortly after knowing the page was erased, I found that the author are now founder & CEO at [Mapillary](https://www.mapillary.com/) (Hail, and hat tip).
