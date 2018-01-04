@@ -7,7 +7,7 @@ This script is implemented with a modification of two algoritms publicated in a 
 
 By modify those algorithm, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
 
-This project was used for my Undergraduate Thesis that can be found in [here](http://repository.its.ac.id/1801/), but please note that it was written in Indonesian.
+This project was used for my Undergraduate Thesis that you can find it in [here](http://repository.its.ac.id/1801/), but please note that it was written in Indonesian.
 
 ## Example of original and forgered image
 ### Original image
