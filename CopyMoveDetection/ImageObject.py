@@ -1,9 +1,6 @@
 __author__ = 'rahmat'
 # 14 November 2016 5:28 PM
 
-"""
-Import library
-"""
 from PIL import Image
 import scipy.misc
 from math import pow
@@ -11,170 +8,166 @@ import numpy as np
 import __builtin__
 from tqdm import tqdm, trange
 import time
-from Tkinter import Text, END, INSERT
 
-"""
-Import script
-"""
 import Container
 import Blocks
 
+
 class ImageObject(object):
     """
-    Objek untuk menampung sebuah citra dan melakukan deteksi pemalsuan pada citra tersebut
+    Object to contains a single image, then detects a fraud in it
     """
 
-    def __init__(self, imageDir, imageName, blockDimension, targetResult):
+    def __init__(self, imageDirectory, imageName, blockDimension, outputDirectory):
         """
-        Fungsi konstruktor untuk mempersiapkan citra dan parameter algoritma
-        :param imageDir: direktori file citra
+        Constructor to initialize the algorithm's parameters
+        :param imageDirectory: direktori file citra
         :param imageName: nama file citra
         :param blockDimension: ukuran blok dimensi (ex:32, 64, 128)
-        :param targetResult: direktori untuk hasil deteksi
+        :param outputDirectory: direktori untuk hasil deteksi
         :return: None
         """
 
         print imageName
-        print "Step 1/4: Inisialisasi objek dan variable",
+        print "Step 1 of 4: Object and variable initialization",
 
-        # parameter gambar
-        self.targetResult = targetResult
+        # image parameter
+        self.imageOutputDirectory = outputDirectory
         self.imagePath = imageName
-        self.image = Image.open(imageDir+imageName)
-        self.imageWidth, self.imageHeight = self.image.size      # height = vertikal atas bawah, width = horizontal lebar kanan kiri
+        self.imageData = Image.open(imageDirectory + imageName)
+        self.imageWidth, self.imageHeight = self.imageData.size  # height = vertikal, width = horizontal
 
-        if self.image.mode != 'L':
-            self.isRGB = True
+        if self.imageData.mode != 'L':  # L means grayscale
+            self.isThisRGBImage = True
+            self.imageData = self.imageData.convert('RGB')
+            RGBImagePixels = self.imageData.load()
+            self.imageGrayscale = self.imageData.convert(
+                'L')  # creates a grayscale version of current image to be used later
+            GrayscaleImagePixels = self.imageGrayscale.load()
 
-            self.image = self.image.convert('RGB')
-            imagePixels = self.image.load()
-            self.imageGrayscale = self.image.convert('L')                 # membuat kanvas grayscale baru dari gambar lama
-            imageGrayscalePixels = self.imageGrayscale.load()
-
-            for y in range(0, self.imageHeight):
-                for x in range(0, self.imageWidth):
-                    tmpR, tmpG, tmpB = imagePixels[x,y]
-                    imageGrayscalePixels[x,y] = int(0.299 * tmpR) + int(0.587 * tmpG) + int(0.114 * tmpB)
+            for yCoordinate in range(0, self.imageHeight):
+                for xCoordinate in range(0, self.imageWidth):
+                    redPixelValue, greenPixelValue, bluePixelValue = RGBImagePixels[xCoordinate, yCoordinate]
+                    GrayscaleImagePixels[xCoordinate, yCoordinate] = int(0.299 * redPixelValue) + int(
+                        0.587 * greenPixelValue) + int(0.114 * bluePixelValue)
         else:
-            self.isRGB = False
-            self.image = self.image.convert('L')
+            self.isThisRGBImage = False
+            self.imageData = self.imageData.convert('L')
 
-        # parameter algoritma paper 1
+        # algorithm's parameters from the first paper
         self.N = self.imageWidth * self.imageHeight
         self.blockDimension = blockDimension
         self.b = self.blockDimension * self.blockDimension
-        self.Nb = (self.imageWidth-self.blockDimension+1)*(self.imageHeight-self.blockDimension+1)
-        self.Nn = 2      # jumlah blok tetangga yang diperiksa
-        # self.Nf = 750    # jumlah minimal frekuensi sebuah offset
-        self.Nf = 188    # jumlah minimal frekuensi sebuah offset
-        self.Nd = 50     # jumlah minimal offset magnitude
+        self.Nb = (self.imageWidth - self.blockDimension + 1) * (self.imageHeight - self.blockDimension + 1)
+        self.Nn = 2  # amount of neighboring block to be evaluated
+        self.Nf = 188  # minimum treshold of the offset's frequency
+        self.Nd = 50  # minimum treshold of the offset's magnitude
 
-        # parameter algoritma paper 2
+        # algorithm's parameters from the second paper
         self.P = (1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125)
         self.t1 = 2.80
         self.t2 = 0.02
 
-        print self.Nb, self.isRGB
+        print self.Nb, self.isThisRGBImage
 
-        # inisialisasi kontainer untuk menampung data
-        self.featureContainer = Container.Container()
-        self.pairContainer = Container.Container()
-        self.offsetDict = {}
-
-        # logger pada GUI
+        # container initialization to later contains several data
+        self.featuresContainer = Container.Container()
+        self.blockPairContainer = Container.Container()
+        self.offsetDictionary = {}
 
     def run(self):
         """
-        Fungsi untuk menjalankan serangkaian langkah algoritma
+        Run the created algorithm
         :return: None
         """
 
-        start = time.time()
+        # time logging (optional, for evaluation purpose)
+        startTimestamp = time.time()
         self.compute()
-        end1 = time.time()
+        timestampAfterComputing = time.time()
         self.sort()
-        end2 = time.time()
+        timestampAfterSorting = time.time()
         self.analyze()
-        end3 = time.time()
+        timestampAfterAnalyze = time.time()
         imageResultPath = self.reconstruct()
-        end4 = time.time()
+        timestampAfterImageCreation = time.time()
 
-        print "Computing time:", end1-start, "detik"
-        print "Sorting time  :", end2-end1, "detik"
-        print "Analyzing time:", end3-end2, "detik"
-        print "Image creation:", end4-end3, "detik"
+        print "Computing time :", timestampAfterComputing - startTimestamp, "second"
+        print "Sorting time   :", timestampAfterSorting - timestampAfterComputing, "second"
+        print "Analyzing time :", timestampAfterAnalyze - timestampAfterSorting, "secon"
+        print "Image creation :", timestampAfterImageCreation - timestampAfterAnalyze, "second"
 
-        totalSecond = end4-start
-        m, s = divmod(totalSecond, 60)
-        h, m = divmod(m, 60)
-        print "Total time    : %d:%02d:%02d detik" % (h, m, s)
-        print ""
+        totalRunningTimeInSecond = timestampAfterImageCreation - startTimestamp
+        totalMinute, totalSecond = divmod(totalRunningTimeInSecond, 60)
+        totalHour, totalMinute = divmod(totalMinute, 60)
+        print "Total time    : %d:%02d:%02d second" % (totalHour, totalMinute, totalSecond), '\n'
         return imageResultPath
 
     def compute(self):
         """
-        Fungsi untuk menghitung karakteristik blok citra
+        To compute the characteristic features of image block
         :return: None
         """
-        print "Step 2/4: Menghitung fitur karakteristik"
+        print "Step 2 of 4: Computing characteristic features"
 
         imageWidthOverlap = self.imageWidth - self.blockDimension
         imageHeightOverlap = self.imageHeight - self.blockDimension
 
-        time.sleep(0.1)
-        if self.isRGB:
+        if self.isThisRGBImage:
             for i in tqdm(range(0, imageWidthOverlap + 1, 1)):
                 for j in range(0, imageHeightOverlap + 1, 1):
-                    imageBlockRGB = self.image.crop((i, j, i+self.blockDimension, j+self.blockDimension))
-                    imageBlockGrayscale = self.imageGrayscale.crop((i, j, i+self.blockDimension, j+self.blockDimension))
+                    imageBlockRGB = self.imageData.crop((i, j, i + self.blockDimension, j + self.blockDimension))
+                    imageBlockGrayscale = self.imageGrayscale.crop(
+                        (i, j, i + self.blockDimension, j + self.blockDimension))
                     imageBlock = Blocks.Blocks(imageBlockGrayscale, imageBlockRGB, i, j, self.blockDimension)
-                    self.featureContainer.addBlock(imageBlock.computeBlock())
+                    self.featuresContainer.addBlock(imageBlock.computeBlock())
         else:
             for i in range(imageWidthOverlap + 1):
                 for j in range(imageHeightOverlap + 1):
-                    imageBlockGrayscale = self.image.crop((i, j, i+self.blockDimension, j+self.blockDimension))
+                    imageBlockGrayscale = self.imageData.crop((i, j, i + self.blockDimension, j + self.blockDimension))
                     imageBlock = Blocks.Blocks(imageBlockGrayscale, None, i, j, self.blockDimension)
-                    self.featureContainer.addBlock(imageBlock.computeBlock())
+                    self.featuresContainer.addBlock(imageBlock.computeBlock())
 
     def sort(self):
         """
-        Memanggil fungsi sort pada objek Container
+        To sort the container's elements
         :return: None
         """
-        self.featureContainer.sortFeatures()
+        self.featuresContainer.sortFeatures()
 
     def analyze(self):
         """
-        Fungsi untuk melakukan analisa pasangan blok citra
+        To analyze pairs of image blocks
         :return: None
         """
-        print "Step 3/4: Membuat pasangan blok citra"
+        print "Step 3 of 4:Pairing image blocks"
         z = 0
         time.sleep(0.1)
-        featureContainerLength = self.featureContainer.getLength()
+        featureContainerLength = self.featuresContainer.getLength()
         for i in tqdm(range(featureContainerLength)):
-            for j in range(i+1, featureContainerLength):
+            for j in range(i + 1, featureContainerLength):
                 result = self.isValid(i, j)
                 if result[0]:
-                    self.addDict(self.featureContainer.container[i][0], self.featureContainer.container[j][0], result[1])
+                    self.addDict(self.featuresContainer.container[i][0], self.featuresContainer.container[j][0],
+                                 result[1])
                     z += 1
                 else:
                     break
 
-    def isValid(self, i, j):
+    def isValid(self, firstBlock, secondBlock):
         """
-        Fungsi untuk mengecek validitas pasangan blok; mencari offset, menghitung magnitude, absolut i dan j,
-        serta validitas blok dari fitur karakteristik
-        :param i: blok 1
-        :param j: blok 2
-        :return: apakah pasangan i,j valid ?
+        To check the validity of the image block pairs and each of the characteristic features,
+        also compute its offset, magnitude, and absolut value.
+        :param firstBlock: the first block
+        :param secondBlock: the second block
+        :return: is the pair of i and j valid?
         """
 
-        if abs(i-j) < self.Nn:
-            iFeature = self.featureContainer.container[i][1]
-            jFeature = self.featureContainer.container[j][1]
+        if abs(firstBlock - secondBlock) < self.Nn:
+            iFeature = self.featuresContainer.container[firstBlock][1]
+            jFeature = self.featuresContainer.container[secondBlock][1]
 
-            # cek validitas nilai karakteristik fitur dari paper 2
+            # check the validity of characteristic features according to the second paper
             if abs(iFeature[0] - jFeature[0]) < self.P[0]:
                 if abs(iFeature[1] - jFeature[1]) < self.P[1]:
                     if abs(iFeature[2] - jFeature[2]) < self.P[2]:
@@ -182,92 +175,110 @@ class ImageObject(object):
                             if abs(iFeature[4] - jFeature[4]) < self.P[4]:
                                 if abs(iFeature[5] - jFeature[5]) < self.P[5]:
                                     if abs(iFeature[6] - jFeature[6]) < self.P[6]:
-                                        if abs(iFeature[0] - jFeature[0]) + abs(iFeature[1] - jFeature[1]) + abs(iFeature[2] - jFeature[2]) < self.t1:
-                                            if abs(iFeature[3] - jFeature[3]) + abs(iFeature[4] - jFeature[4]) + abs(iFeature[5] - jFeature[5]) + abs(iFeature[6] - jFeature[6]) < self.t2:
+                                        if abs(iFeature[0] - jFeature[0]) + abs(iFeature[1] - jFeature[1]) + abs(
+                                                        iFeature[2] - jFeature[2]) < self.t1:
+                                            if abs(iFeature[3] - jFeature[3]) + abs(iFeature[4] - jFeature[4]) + abs(
+                                                            iFeature[5] - jFeature[5]) + abs(
+                                                        iFeature[6] - jFeature[6]) < self.t2:
 
-                                                # mencari offset dari masing-masing pasangan
-                                                iCoordinate = self.featureContainer.container[i][0]
-                                                jCoordinate = self.featureContainer.container[j][0]
+                                                # compute the pair's offset
+                                                iCoordinate = self.featuresContainer.container[firstBlock][0]
+                                                jCoordinate = self.featuresContainer.container[secondBlock][0]
 
-                                                # Robust Detection Non Absolute
-                                                offset = (iCoordinate[0] - jCoordinate[0], iCoordinate[1] - jCoordinate[1])
+                                                # Non Absolute Robust Detection Method
+                                                offset = (
+                                                    iCoordinate[0] - jCoordinate[0], iCoordinate[1] - jCoordinate[1])
 
-                                                # menghitung magnitude
+                                                # compute the pair's magnitude
                                                 magnitude = np.sqrt(pow(offset[0], 2) + pow(offset[1], 2))
                                                 if magnitude >= self.Nd:
                                                     return 1, offset
         return 0,
 
-    def addDict(self, coor1, coor2, offset):
+    def addDict(self, firstCoordinate, secondCoordinate, pairOffset):
         """
-        Fungsi untuk menambahkan pasangan coor1, coor2, dan offsetnya kedalam dictionary
+        Add a pair of coordinate and its offset to the dictionary
         """
-        if self.offsetDict.has_key(offset):
-            self.offsetDict[offset].append(coor1)
-            self.offsetDict[offset].append(coor2)
+        if self.offsetDictionary.has_key(pairOffset):
+            self.offsetDictionary[pairOffset].append(firstCoordinate)
+            self.offsetDictionary[pairOffset].append(secondCoordinate)
         else:
-            self.offsetDict[offset] = [coor1, coor2]
+            self.offsetDictionary[pairOffset] = [firstCoordinate, secondCoordinate]
 
     def reconstruct(self):
         """
-        Fungsi untuk melakukan konstruksi ulang citra dengan menyertakan hasil dugaan deteksi
+        Reconstruct the image according to the fraud detectionr esult
         """
-        time.sleep(0.1)
-        print "Step 4/4: Rekonstruksi citra"
+        print "Step 4 of 4: Image reconstruction"
 
-        # array pembentuk citra hasil
-        imageArray = np.zeros((self.imageHeight, self.imageWidth))
+        # create an array as the canvas of the final image
+        groundtruthImage = np.zeros((self.imageHeight, self.imageWidth))
+        linedImage = np.array(self.imageData.convert('RGB'))
 
-        scale = np.array(self.image.convert('RGB'))
-        lined = np.array(self.image.convert('RGB'))
-
-        for key in sorted(self.offsetDict, key=lambda key: __builtin__.len(self.offsetDict[key]), reverse=True):
-            if self.offsetDict[key].__len__() < self.Nf*2:
+        for key in sorted(self.offsetDictionary, key=lambda key: __builtin__.len(self.offsetDictionary[key]),
+                          reverse=True):
+            if self.offsetDictionary[key].__len__() < self.Nf * 2:
                 break
-            print key, self.offsetDict[key].__len__()
-            for i in range(self.offsetDict[key].__len__()):
-                # gambar hasil (hitam putih)
-                for j in range(self.offsetDict[key][i][1], self.offsetDict[key][i][1]+self.blockDimension):
-                    for k in range(self.offsetDict[key][i][0], self.offsetDict[key][i][0]+self.blockDimension):
-                        imageArray[j][k] = 255
+            print key, self.offsetDictionary[key].__len__()
+            for i in range(self.offsetDictionary[key].__len__()):
+                # The original image (grayscale)
+                for j in range(self.offsetDictionary[key][i][1],
+                               self.offsetDictionary[key][i][1] + self.blockDimension):
+                    for k in range(self.offsetDictionary[key][i][0],
+                                   self.offsetDictionary[key][i][0] + self.blockDimension):
+                        groundtruthImage[j][k] = 255
 
-        # lined gambar asli
-        for x in range(2, self.imageHeight-2):
-            for y in range(2, self.imageWidth-2):
-                if imageArray[x,y] == 255 and (imageArray[x+1,y] == 0 or imageArray[x-1,y] == 0 or
-                                                        imageArray[x,y+1] == 0 or imageArray[x,y-1] == 0 or
-                                                        imageArray[x-1,y+1] == 0 or imageArray[x+1,y+1] == 0 or
-                                                        imageArray[x-1,y-1] == 0 or imageArray[x+1,y-1] == 0):
+        # creating a line edge from the original image (for the visual purpose)
+        for xCoordinate in range(2, self.imageHeight - 2):
+            for yCordinate in range(2, self.imageWidth - 2):
+                if groundtruthImage[xCoordinate, yCordinate] == 255 and \
+                        (groundtruthImage[xCoordinate + 1, yCordinate] == 0 or groundtruthImage[
+                                xCoordinate - 1, yCordinate] == 0 or
+                                 groundtruthImage[xCoordinate, yCordinate + 1] == 0 or groundtruthImage[
+                            xCoordinate, yCordinate - 1] == 0 or
+                                 groundtruthImage[xCoordinate - 1, yCordinate + 1] == 0 or groundtruthImage[
+                                xCoordinate + 1, yCordinate + 1] == 0 or
+                                 groundtruthImage[xCoordinate - 1, yCordinate - 1] == 0 or groundtruthImage[
+                                xCoordinate + 1, yCordinate - 1] == 0):
 
-                    # ujung kiri atas, kanan atas, kiri bawah, kanan bawah
-                    if imageArray[x-1,y] == 0 and imageArray[x,y-1] == 0 and imageArray[x-1,y-1] == 0:
-                        lined[x-2:x,y,1] = 255
-                        lined[x,y-2:y,1] = 255
-                        lined[x-2:x,y-2:y,1] = 255
-                    elif imageArray[x+1,y] == 0 and imageArray[x,y-1] == 0 and imageArray[x+1,y-1] == 0:
-                        lined[x+1:x+3,y,1] = 255
-                        lined[x,y-2:y,1] = 255
-                        lined[x+1:x+3,y-2:y,1] = 255
-                    elif imageArray[x-1,y] == 0 and imageArray[x,y+1] == 0 and imageArray[x-1,y+1] == 0:
-                        lined[x-2:x,y,1] = 255
-                        lined[x,y+1:y+3,1] = 255
-                        lined[x-2:x,y+1:y+3,1] = 255
-                    elif imageArray[x+1,y] == 0 and imageArray[x,y+1] == 0 and imageArray[x+1,y+1] == 0:
-                        lined[x+1:x+3,y,1] = 255
-                        lined[x,y+1:y+3,1] = 255
-                        lined[x+1:x+3,y+1:y+3,1] = 255
-                    # atas bawah kiri kanan
-                    elif imageArray[x,y+1] == 0:
-                        lined[x,y+1:y+3,1] = 255
-                    elif imageArray[x,y-1] == 0:
-                        lined[x,y-2:y,1] = 255
-                    elif imageArray[x-1,y] == 0:
-                        lined[x-2:x,y,1] = 255
-                    elif imageArray[x+1,y] == 0:
-                        lined[x+1:x+3,y,1] = 255
+                    # creating the edge line, respectively left-upper, right-upper, left-down, right-down
+                    if groundtruthImage[xCoordinate - 1, yCordinate] == 0 and \
+                                    groundtruthImage[xCoordinate, yCordinate - 1] == 0 and \
+                                    groundtruthImage[xCoordinate - 1, yCordinate - 1] == 0:
+                        linedImage[xCoordinate - 2:xCoordinate, yCordinate, 1] = 255
+                        linedImage[xCoordinate, yCordinate - 2:yCordinate, 1] = 255
+                        linedImage[xCoordinate - 2:xCoordinate, yCordinate - 2:yCordinate, 1] = 255
+                    elif groundtruthImage[xCoordinate + 1, yCordinate] == 0 and \
+                                    groundtruthImage[xCoordinate, yCordinate - 1] == 0 and \
+                                    groundtruthImage[xCoordinate + 1, yCordinate - 1] == 0:
+                        linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate, 1] = 255
+                        linedImage[xCoordinate, yCordinate - 2:yCordinate, 1] = 255
+                        linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate - 2:yCordinate, 1] = 255
+                    elif groundtruthImage[xCoordinate - 1, yCordinate] == 0 and \
+                                    groundtruthImage[xCoordinate, yCordinate + 1] == 0 and \
+                                    groundtruthImage[xCoordinate - 1, yCordinate + 1] == 0:
+                        linedImage[xCoordinate - 2:xCoordinate, yCordinate, 1] = 255
+                        linedImage[xCoordinate, yCordinate + 1:yCordinate + 3, 1] = 255
+                        linedImage[xCoordinate - 2:xCoordinate, yCordinate + 1:yCordinate + 3, 1] = 255
+                    elif groundtruthImage[xCoordinate + 1, yCordinate] == 0 and \
+                                    groundtruthImage[xCoordinate, yCordinate + 1] == 0 and \
+                                    groundtruthImage[xCoordinate + 1, yCordinate + 1] == 0:
+                        linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate, 1] = 255
+                        linedImage[xCoordinate, yCordinate + 1:yCordinate + 3, 1] = 255
+                        linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate + 1:yCordinate + 3, 1] = 255
 
-        timestr = time.strftime("%Y%m%d_%H%M%S")
-        scipy.misc.imsave(self.targetResult+timestr+"_"+self.imagePath, imageArray)
-        scipy.misc.imsave(self.targetResult+timestr+"_lined_"+self.imagePath, lined)
+                    # creating the straigh line, respectively upper, down, left, right line
+                    elif groundtruthImage[xCoordinate, yCordinate + 1] == 0:
+                        linedImage[xCoordinate, yCordinate + 1:yCordinate + 3, 1] = 255
+                    elif groundtruthImage[xCoordinate, yCordinate - 1] == 0:
+                        linedImage[xCoordinate, yCordinate - 2:yCordinate, 1] = 255
+                    elif groundtruthImage[xCoordinate - 1, yCordinate] == 0:
+                        linedImage[xCoordinate - 2:xCoordinate, yCordinate, 1] = 255
+                    elif groundtruthImage[xCoordinate + 1, yCordinate] == 0:
+                        linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate, 1] = 255
 
-        return self.targetResult+timestr+"_lined_"+self.imagePath
+        timeStamp = time.strftime("%Y%m%d_%H%M%S")
+        scipy.misc.imsave(self.imageOutputDirectory + timeStamp + "_" + self.imagePath, groundtruthImage)
+        scipy.misc.imsave(self.imageOutputDirectory + timeStamp + "_lined_" + self.imagePath, linedImage)
+
+        return self.imageOutputDirectory + timeStamp + "_lined_" + self.imagePath

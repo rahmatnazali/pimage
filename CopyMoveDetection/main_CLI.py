@@ -15,7 +15,3 @@ Main Code
 
 # example
 CopyMoveDetection.detect('../testcase_image/', '06_horses_copy.png', '../testcase_result/', blockSize=32)
-
-
-
-

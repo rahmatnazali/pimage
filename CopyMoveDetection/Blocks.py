@@ -1,82 +1,83 @@
 __author__ = 'rahmat'
 # 14 November 2016 5:13 PM
 
-"""
-Import library
-"""
 import numpy as np
 from sklearn.decomposition import PCA
 
 class Blocks(object):
     """
-    Objek blok untuk menampung sebuah blok citra dan mencari fitur karakteristiknya
+    Contains a single image block and handle the calculation of characteristic features
     """
-    def __init__(self, imageGrayscale, imageRGB, x, y, blockDimension):
+
+    def __init__(self, grayscaleImageBlock, rgbImageBlock, x, y, blockDimension):
         """
-        Fungsi konstruktor untuk persiapan citra masukan
-        :param imageGrayscale: Blok imageGrayscale yang akan diolah
-        :param x: Koordinat ujung kiri blok citra pada sumbu x
-        :param y: Koordinat ujung kiri blok citra pada sumbu y
+        Initializing the input image
+        :param grayscaleImageBlock: grayscale image block
+        :param rgbImageBlock: rgb image block
+        :param x: x coordinate (upper-left)
+        :param y: y coordinate (upper-left)
         :return: None
         """
-        self.imageGrayscale = imageGrayscale                                      # file imageGrayscale dari blok citra
+        self.imageGrayscale = grayscaleImageBlock  # block of grayscale image
         self.imageGrayscalePixels = self.imageGrayscale.load()
 
-        if imageRGB is not None:
-            self.imageRGB = imageRGB
+        if rgbImageBlock is not None:
+            self.imageRGB = rgbImageBlock
             self.imageRGBPixels = self.imageRGB.load()
-            self.isRGB = True
+            self.isImageRGB = True
         else:
-            self.isRGB = False
+            self.isImageRGB = False
 
         self.coor = (x, y)
         self.blockDimension = blockDimension
 
     def computeBlock(self):
         """
-        Fungsi untuk membentuk representasi data dari blok citra
-        :return: Sebuah data yang merepresentasikan blok citra
+        Create a representation of the image block
+        :return: image block representation data
         """
-        blockData = []
-        blockData.append(self.coor)
-        blockData.append(self.computeCharaFeatures(4))
-        blockData.append(self.computePCA(6))
-        return blockData
+        blockDataList = []
+        blockDataList.append(self.coor)
+        blockDataList.append(self.computeCharaFeatures(4))
+        blockDataList.append(self.computePCA(6))
+        return blockDataList
 
-    def computePCA(self, roundTo):
+    def computePCA(self, precision):
         """
-        Fungsi untuk menghitung principal component dari blok citra
-        :param roundTo: tingkat ketelitian dalam pembulatan fitur karakteristik
-        :return: Principal component dari blok citra
+        Compute Principal Component Analysis from the image block
+        :param precision: characteristic features precision
+        :return: Principal Component from the image block
         """
-        pca = PCA(n_components=1)
-        if self.isRGB:
+        PCAModule = PCA(n_components=1)
+        if self.isImageRGB:
             imageArray = np.array(self.imageRGB)
-            r = imageArray[:,:,0]
-            g = imageArray[:,:,1]
-            b = imageArray[:,:,2]
+            r = imageArray[:, :, 0]
+            g = imageArray[:, :, 1]
+            b = imageArray[:, :, 2]
 
-            concat = np.concatenate((r, np.concatenate((g,b), axis=0)), axis=0)
-            pca.fit_transform(concat)
-            principalComponents = pca.components_
-            roundedResult = [ round(elem, roundTo) for elem in list(principalComponents.flatten())]
-            return roundedResult
+            concatenatedArray = np.concatenate((r, np.concatenate((g, b), axis=0)), axis=0)
+            PCAModule.fit_transform(concatenatedArray)
+            principalComponents = PCAModule.components_
+            preciseResult = [round(element, precision) for element in list(principalComponents.flatten())]
+            return preciseResult
         else:
-            imageArray = np.array( self.imageGrayscale)
-            pca.fit_transform(imageArray)
-            principalComponents = pca.components_
-            roundedResult = [ round(elem, roundTo) for elem in list(principalComponents.flatten())]
-            return roundedResult
+            imageArray = np.array(self.imageGrayscale)
+            PCAModule.fit_transform(imageArray)
+            principalComponents = PCAModule.components_
+            preciseResult = [round(element, precision) for element in list(principalComponents.flatten())]
+            return preciseResult
 
-    def computeCharaFeatures(self, roundTo):
+    def computeCharaFeatures(self, precision):
         """
-        Menghitung 7 nilai fitur karakteristik dari setiap blok citra
+        Compute 7 characteristic features from every image blocks
+        :param precision: feature characteristic precision
         :return: None
         """
 
-        charaFeature = []
+        characteristicFeaturesList = []
 
-        c4_part1 = 0                   # variabel untuk menyimpan nilai part1 dan part2 setiap fitur karakteristik
+        # variable to compute characteristic features
+        c4_part1 = 0
         c4_part2 = 0
         c5_part1 = 0
         c5_part2 = 0
@@ -85,62 +86,61 @@ class Blocks(object):
         c7_part1 = 0
         c7_part2 = 0
 
-        """ Menghitung c1, c2, c3 sesuai jenis colorspace dari blok citra """
+        """ Compute c1, c2, c3 according to the image block's colorspace """
 
-        if self.isRGB:
-            sumR = 0
-            sumG = 0
-            sumB = 0
-            for y in range(0, self.blockDimension):                   # menghitung jumlah total nilai piksel
-                for x in range(0, self.blockDimension):
-                    tmpR, tmpG, tmpB = self.imageRGBPixels[x,y]
-                    sumR += tmpR
-                    sumG += tmpG
-                    sumB += tmpB
+        if self.isImageRGB:
+            sumOfRedPixelValue = 0
+            sumOfGreenPixelValue = 0
+            sumOfBluePixelValue = 0
+            for yCoordinate in range(0, self.blockDimension):  # compute sum of the pixel value
+                for xCoordinate in range(0, self.blockDimension):
+                    tmpR, tmpG, tmpB = self.imageRGBPixels[xCoordinate, yCoordinate]
+                    sumOfRedPixelValue += tmpR
+                    sumOfGreenPixelValue += tmpG
+                    sumOfBluePixelValue += tmpB
 
-            totalPixels = self.blockDimension * self.blockDimension
-            sumR = sumR / (totalPixels)  # menghitung rata-rata dari tiap jenis warna
-            sumG = sumG / (totalPixels)
-            sumB = sumB / (totalPixels)
+            sumOfPixels = self.blockDimension * self.blockDimension
+            sumOfRedPixelValue = sumOfRedPixelValue / (sumOfPixels)  # mean from each of the colorspaces
+            sumOfGreenPixelValue = sumOfGreenPixelValue / (sumOfPixels)
+            sumOfBluePixelValue = sumOfBluePixelValue / (sumOfPixels)
 
-            charaFeature.append(sumR)
-            charaFeature.append(sumG)
-            charaFeature.append(sumB)
+            characteristicFeaturesList.append(sumOfRedPixelValue)
+            characteristicFeaturesList.append(sumOfGreenPixelValue)
+            characteristicFeaturesList.append(sumOfBluePixelValue)
 
         else:
-            charaFeature.append(0)
-            charaFeature.append(0)
-            charaFeature.append(0)
+            characteristicFeaturesList.append(0)
+            characteristicFeaturesList.append(0)
+            characteristicFeaturesList.append(0)
 
-        """ Menghitung c4, c5, c6, c7 berdasarkan 4 blok berbeda arah"""
-        for y in range(0, self.blockDimension):           # menghitung part 1 dan part 2 dari setiap fitur karakteristik
-            for x in range(0, self.blockDimension):
-                # c4
-                if y <= self.blockDimension / 2:
-                    c4_part1 += self.imageGrayscalePixels[x,y]
+        """ Compute  c4, c5, c6 and c7 according to the pattern rule on the second paper"""
+        for yCoordinate in range(0, self.blockDimension):  # compute the part 1 and part 2 of each feature characteristic
+            for xCoordinate in range(0, self.blockDimension):
+                # compute c4
+                if yCoordinate <= self.blockDimension / 2:
+                    c4_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:
-                    c4_part2 += self.imageGrayscalePixels[x,y]
-                # c5
-                if x <= self.blockDimension / 2:
-                    c5_part1 += self.imageGrayscalePixels[x,y]
+                    c4_part2 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
+                # compute c5
+                if xCoordinate <= self.blockDimension / 2:
+                    c5_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:
-                    c5_part2 += self.imageGrayscalePixels[x,y]
-                # c6
-                if x-y >= 0:
-                    c6_part1 += self.imageGrayscalePixels[x,y]
+                    c5_part2 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
+                # compute c6
+                if xCoordinate - yCoordinate >= 0:
+                    c6_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:
-                    c6_part2 += self.imageGrayscalePixels[x,y]
-                # c7
-                if x+y <= self.blockDimension:
-                    c7_part1 += self.imageGrayscalePixels[x,y]
+                    c6_part2 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
+                # compute c7
+                if xCoordinate + yCoordinate <= self.blockDimension:
+                    c7_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:
-                    c7_part2 += self.imageGrayscalePixels[x,y]
+                    c7_part2 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
 
-        charaFeature.append(float(c4_part1) / float(c4_part1 + c4_part2))
-        charaFeature.append(float(c5_part1) / float(c5_part1 + c5_part2))
-        charaFeature.append(float(c6_part1) / float(c6_part1 + c6_part2))
-        charaFeature.append(float(c7_part1) / float(c7_part1 + c7_part2))
+        characteristicFeaturesList.append(float(c4_part1) / float(c4_part1 + c4_part2))
+        characteristicFeaturesList.append(float(c5_part1) / float(c5_part1 + c5_part2))
+        characteristicFeaturesList.append(float(c6_part1) / float(c6_part1 + c6_part2))
+        characteristicFeaturesList.append(float(c7_part1) / float(c7_part1 + c7_part2))
 
-        roundedResult = [round(elem, roundTo) for elem in charaFeature]
-        return roundedResult
-
+        preciseResult = [round(element, precision) for element in characteristicFeaturesList]
+        return preciseResult

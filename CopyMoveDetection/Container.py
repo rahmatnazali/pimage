@@ -3,12 +3,12 @@ __author__ = 'rahmat'
 
 class Container(object):
     """
-    Objek kontainer data untuk menyimpan hasil komputasi
+    Object to contains the computation result
     """
 
     def __init__(self):
         """
-        Fungsi konstruktor untuk menginisialisasi list
+        List initialization
         :return: none
         """
         self.container = []
@@ -16,50 +16,50 @@ class Container(object):
 
     def getLength(self):
         """
-        Fungsi untuk mengambil panjang dari objek kontainer data
-        :return: Panjang kontainer data
+        To return the current container's length
+        :return: length of the container
         """
         return self.container.__len__()
 
-    def addBlock(self, blockData):
+    def addBlock(self, newData):
         """
-        Fungsi untuk memasukkan sebuah blok data pada kontainer data
-        :param blockData: list yang akan dimasukkan kedalam kontainer data
+        Insert a data block to the container
+        :param newData: data to be inserted into the block
         :return: None
         """
-        self.container.append(blockData)
+        self.container.append(newData)
         return
 
     def sortFeatures(self):
         """
-        Fungsi sorting untuk mengurutkan kontainer data
+        Sort all the container's data based on certain key
         :return: None
         """
         self.container = sorted(self.container, key=lambda x:(x[1], x[2]))
         return
 
     """
-    Fungsi debug
+    Functions for debug purpose
     """
     def printAllContainer(self):
         """
-        Fungsi untuk mencetak isi kontainer data secara keseluruhan
+        Prints all the elements inside the container
         :return: None
         """
         for index in range(0, self.container.__len__()):
             print self.container[index]
         return
 
-    def printContainer(self, i):
+    def printContainer(self, count):
         """
-        Fungsi untuk mencetak sebagian isi kontainer
-        :param i: jumlah baris yang tercetak dihitung dari indeks ke-0
+        Prints certain elements inside the container
+        :param count: amount to be printed
         :return: None
         """
-        print "index container:", self.container.__len__()
-        if i > self.container.__len__():
+        print "Element's index:", self.container.__len__()
+        if count > self.container.__len__():
             self.printAllContainer()
         else:
-            for index in range(0, i):
+            for index in range(0, count):
                 print self.container[index]
         return

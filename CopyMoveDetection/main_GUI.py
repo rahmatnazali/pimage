@@ -1,6 +1,11 @@
 __author__ = 'rahmat'
 # 08 December 2016 10:01 AM
 
+"""
+Important: This script is no longer maintained.
+"""
+
+
 from Tkinter import Frame, Label, Tk, BOTH, Text, Menu, INSERT, END
 from ttk import Frame, Button, Style
 import tkFileDialog
@@ -8,7 +13,6 @@ import tkMessageBox as mbox
 from PIL import Image, ImageTk
 
 import CopyMoveDetection
-
 
 class aFrame(Frame):
 
@@ -48,7 +52,6 @@ class aFrame(Frame):
         self.labelRight = Label(self, image=imageRightLabel)
         self.labelRight.image = imageRightLabel
         self.labelRight.place(x=525, y=100)
-
 
         self.centerWindow()
 
@@ -95,11 +98,11 @@ class aFrame(Frame):
 
     def onDetect(self):
         if self.imageName == "":
-            mbox.showerror("Error", 'Citra masukan belum terisi\nSilakan pilih dengan menekan tombol "Open File"')
+            mbox.showerror("Error", 'No image selected\nSelect an image by clicking "Open File"')
         else:
 
             self.textBoxLog.config(state='normal')
-            self.textBoxLog.insert(END, "Mendeteksi: "+self.imageName+"\n")
+            self.textBoxLog.insert(END, "Detecting: "+self.imageName+"\n")
             self.textBoxLog.see(END)
             self.textBoxLog.config(state='disabled')
 
@@ -111,19 +114,11 @@ class aFrame(Frame):
             self.labelRight.place(x=525, y=100)
 
             self.textBoxLog.config(state='normal')
-            self.textBoxLog.insert(END, "Selesai.")
+            self.textBoxLog.insert(END, "Done.")
             self.textBoxLog.see(END)
             self.textBoxLog.config(state='disabled')
-            pass
-        pass
 
-def main():
-
+if __name__ == '__main__':
     root = Tk()
     app = aFrame(root)
     root.mainloop()
-
-
-if __name__ == '__main__':
-    main()
-
