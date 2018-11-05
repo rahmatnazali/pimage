@@ -28,7 +28,7 @@ By default, the script will log entire detection process like so:
 ## Getting Started
 Make sure you already have:
 * [Python 2.7](https://www.python.org/)
-* [Anaconda](http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html)
+* [Anaconda](https://www.anaconda.com/)
 
 Also the required python libraries:
 * [Numpy](https://pypi.python.org/pypi/numpy)
