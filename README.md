@@ -68,7 +68,7 @@ If _blockSize_ parameter was not given, the default value would be 32 (integer).
 * [Pycharm 4.5.5](https://confluence.jetbrains.com/display/PYH/Previous+PyCharm+Releases) - IDE
 
 ## Authors
-* **Rahmat Nazali S** - [LinkedIn](https://www.linkedin.com/in/rahmat-nazali-salimi-43391a13b/)
+* **Rahmat Nazali S** - [LinkedIn](https://www.linkedin.com/in/rahmat-nazali-s-43391a13b/)
 * **Hudan Studiawan** (Undergraduate Thesis Adviser) - [Github](https://github.com/studiawan)
 
 ## License
