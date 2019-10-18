@@ -41,12 +41,12 @@ Also the required python libraries:
 
 ## Starting
 ### Running GUI version
-1. Run [main_GUI.py](/CopyMoveDetection/main_GUI.py)
+1. Run [main_GUI.py](/copy_move_detection_python_2/main_GUI.py)
 2. A new window will apear, click open file and choose your image
 3. Click detect and the detection process will start
 4. After done, the detection result will be written in your CLI, while the result image will be shown in GUI
 ### Running CLI version
-By default, you can run it using [main_CLI.py](/CopyMoveDetection/main_CLI.py).
+By default, you can run it using [main_CLI.py](/copy_move_detection_python_2/main_CLI.py).
 But you can also modify it, or even make your own python script with the format below:
 1. Make sure to import ```CopyMoveDetection``` package
 2. Directly call function ```detect``` or ```detect_dir``` and give the proper parameter
