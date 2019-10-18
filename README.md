@@ -1,5 +1,7 @@
 # Copy-Move Detection on Digital Image using Python
 
+**Update 18 Oct 2019**: I believe it is time to rewrite and optimize on python 3! Currenlty WIP :)
+
 **Update**: I just released english version for english reader! You can have it via [Release tag](https://github.com/rahmatnazali/image-copy-move-detection/releases/tag/English_Version) or by pulling the newest code.
 
 This is an implementation of python script to detect a copy-move manipulation attack on digital image based on Overlapping Blocks.
