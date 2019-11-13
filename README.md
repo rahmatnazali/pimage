@@ -2,7 +2,7 @@
 
 Hi! I got piles of emails of thanks regarding how this code help them on their affairs or getting their Degree :)
 
-If you want, you can support me with <a href="https://www.buymeacoffee.com/EyWFfgS" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> so I can keep this repository maintained :)
+If you want to support me, you can <a href="https://www.buymeacoffee.com/EyWFfgS" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a> so I can keep this repository maintained :)
 
 ### Udpdate
 **Update 18 Oct 2019**: I believe it is time to rewrite and optimize on python 3! Currenlty WIP :)
