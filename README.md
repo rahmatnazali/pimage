@@ -23,15 +23,15 @@ This project was used for my Undergraduate Thesis that you can find it in [here]
 
 ## Example of original and forgered image
 ### Original image
-![Original image](/screenshot/horse.png?raw=true) 
+![Original image](/assets/dataset_example.png?raw=true) 
 ### Forgered image
-![Forgered image](/screenshot/horse_blur.png?raw=true)
+![Forgered image](/assets/dataset_example_blur.png?raw=true)
 
 ## GUI
-![GUI screenshoot](/screenshot/02_home_result.PNG?raw=true)
+![GUI screenshoot](/assets/gui_result.PNG?raw=true)
 
 By default, the script will log entire detection process like so:
-![Log screenshoot](/screenshot/03_log.PNG?raw=true)
+![Log screenshoot](/assets/console_log.PNG?raw=true)
 
 
 ## Getting Started
