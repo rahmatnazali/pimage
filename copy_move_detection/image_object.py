@@ -1,8 +1,10 @@
 import copy_move_detection.container
 import copy_move_detection.block
 
-import PIL
+# import PIL
+from PIL import Image
 import scipy.misc
+import imageio
 import tqdm
 
 import numpy as np
@@ -28,12 +30,12 @@ class ImageObject(object):
         """
 
         print(image_name)
-        print("Step 1 of 4: Object and variable initialization", end='')
+        print("Step 1 of 4: Object and variable initialization, ", end='')
 
         # image parameter
         self.image_output_directory = output_directory
         self.image_path = image_name
-        self.image_data = PIL.Image.open(image_directory + image_name)
+        self.image_data = Image.open(image_directory + image_name)
         self.image_width, self.image_height = self.image_data.size  # height = vertical, width = horizontal
 
         if self.image_data.mode != 'L':  # L means grayscale
@@ -92,7 +94,7 @@ class ImageObject(object):
 
         print("Computing time :", timestamp_after_computing - start_timestamp, "second")
         print("Sorting time   :", timestamp_after_sorting - timestamp_after_computing, "second")
-        print("Analyzing time :", timestamp_after_analyze - timestamp_after_sorting, "secon")
+        print("Analyzing time :", timestamp_after_analyze - timestamp_after_sorting, "second")
         print("Image creation :", timestamp_after_image_creation - timestamp_after_analyze, "second")
 
         total_running_time_in_second = timestamp_after_image_creation - start_timestamp
@@ -142,6 +144,8 @@ class ImageObject(object):
         z = 0
         time.sleep(0.1)
         feature_container_length = self.features_container.get_length()
+
+        # todo: https://github.com/rahmatnazali/image-copy-move-detection/issues/5
         for i in tqdm.tqdm(range(feature_container_length)):
             for j in range(i + 1, feature_container_length):
                 result = self.is_valid(i, j)
@@ -280,7 +284,11 @@ class ImageObject(object):
                         lined_image[x_coordinate + 1:x_coordinate + 3, y_cordinate, 1] = 255
 
         timestamp = time.strftime("%Y%m%d_%H%M%S")
-        scipy.misc.imsave(self.image_output_directory + timestamp + "_" + self.image_path, groundtruth_image)
-        scipy.misc.imsave(self.image_output_directory + timestamp + "_lined_" + self.image_path, lined_image)
+
+        # scipy.misc.imsave(self.image_output_directory + timestamp + "_" + self.image_path, groundtruth_image)
+        # scipy.misc.imsave(self.image_output_directory + timestamp + "_lined_" + self.image_path, lined_image)
+        imageio.imwrite(self.image_output_directory + timestamp + "_" + self.image_path, groundtruth_image)
+        imageio.imwrite(self.image_output_directory + timestamp + "_lined_" + self.image_path, lined_image)
+
 
         return self.image_output_directory + timestamp + "_lined_" + self.image_path
