@@ -1,11 +1,6 @@
 # Copy-Move Detection on Digital Image using Python
 
-Hi! I got piles of emails of thanks regarding how this code help them on their affairs or getting their Degree :) Maintain the repository took time and effort, if you want to support me, please consider <a href="https://www.buymeacoffee.com/EyWFfgS" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-
-### Old Python 2 version
-
-You can find the old module written with python 2 on [this repository](https://github.com/rahmatnazali/image-copy-move-detection-python2). This repository now host the python 3 version
-
+**Old Python 2 version**: You can find the old module written with python 2 on [this repository](https://github.com/rahmatnazali/image-copy-move-detection-python2). This repository now host the python 3 version
 
 ## Description
 This is an implementation of python script to detect a copy-move manipulation attack on digital image based on Overlapping Blocks.
@@ -18,11 +13,13 @@ By modify those algorithm, this script will have a tolerance regarding variety o
 
 This project was used for my Undergraduate Thesis that you can find it in [here](http://repository.its.ac.id/1801/), but please note that it was written in Indonesian.
 
-## Example of original and forgered image
+## Example image
 ### Original image
 ![Original image](/assets/dataset_example.png?raw=true) 
 ### Forgered image
 ![Forgered image](/assets/dataset_example_blur.png?raw=true)
+### Result after detection
+![Result image](/output/20191125_094809_lined_dataset_example_blur.png)
 
 ## GUI
 ![GUI screenshoot](/assets/gui_result.PNG?raw=true)
@@ -82,3 +79,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE) 
 
 ## Acknowledgments
 I mainly learnt how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html) written by Jan Erik Solem, but the page has been erased. Shortly after knowing the page was gone, I found that the author are now founder & CEO at [Mapillary](https://www.mapillary.com/) (Hail, and hat tip).
+
+## Support
+
+Hi! I got piles of emails of thanks regarding how this code help them on their affairs or getting their Degree :) Maintain the repository took time and effort, if you want to support me, please consider <a href="https://www.buymeacoffee.com/EyWFfgS" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
