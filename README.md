@@ -18,61 +18,31 @@ This project was used for my Undergraduate Thesis that you can find it in [here]
 ![Original image](/assets/dataset_example.png?raw=true) 
 ### Forgered image
 ![Forgered image](/assets/dataset_example_blur.png?raw=true)
-### Result after detection
+### Example result after detection
 ![Result image](/output/20191125_094809_lined_dataset_example_blur.png)
 
 ## GUI
 ![GUI screenshoot](/assets/gui_result.PNG?raw=true)
 
-By default, the script will log entire detection process like so:
-![Log screenshoot](/assets/console_log.PNG?raw=true)
-
+Note: This version does not support GUI. If you want to implement it, you can visit the old repo mentioned above for the snippets.
 
 ## Getting Started
-Make sure you already have:
-* [Python 2.7](https://www.python.org/)
-* [Anaconda](https://www.anaconda.com/)
 
-Also the required python libraries:
-* [Numpy](https://pypi.python.org/pypi/numpy)
-* [SKLearn/scikit-learn](https://pypi.python.org/pypi/scikit-learn/0.18.1)
-* [Python Image Library (PIL)](https://pypi.python.org/pypi/PIL)
-* [Scipy](https://pypi.python.org/pypi/scipy/0.7.0)
-* [tqdm](https://pypi.python.org/pypi/tqdm)
+Assuming you already have Python 3.x on your machine:
+- clone this repo
+- create a [virtual environment](https://docs.python.org/3/library/venv.html) and enter into it
+- run `pip3 install -r requirements.txt`
 
-## Starting
-### Running GUI version
-1. Run [main_GUI.py](/copy_move_detection_python_2/main_GUI.py)
-2. A new window will apear, click open file and choose your image
-3. Click detect and the detection process will start
-4. After done, the detection result will be written in your CLI, while the result image will be shown in GUI
-### Running CLI version
-By default, you can run it using [main_CLI.py](/copy_move_detection_python_2/main_CLI.py).
-But you can also modify it, or even make your own python script with the format below:
-1. Make sure to import ```CopyMoveDetection``` package
-2. Directly call function ```detect``` or ```detect_dir``` and give the proper parameter
+## Example
 
-Your scirpt will likely looks like so:
+```python3
+from copy_move_detection import detect
+detect.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32)
 ```
-import CopyMoveDetection
 
-# To detect all images on a single folder, use detect_dir function
-CopyMoveDetection.detect_dir('your/directory/path/', 'your/result/directory/' [, blockSize])
-
-# To detect single image on a certain path, use detect function
-CopyMoveDetection.detect('your/directory/path/', 'your_image.png', 'your/result/directory/' [, blockSize])
-```
 If _blockSize_ parameter was not given, the default value would be 32 (integer).
 
-  
-## Built With
-* [Python 2.7](https://www.python.org/) - Base language
-* [Anaconda 4.3.1](https://www.continuum.io/downloads) - Python data science package
-* [Pycharm 4.5.5](https://confluence.jetbrains.com/display/PYH/Previous+PyCharm+Releases) - IDE
-
-## Authors
-* **Rahmat Nazali S** - [LinkedIn](https://www.linkedin.com/in/rahmat-nazali-s-43391a13b/)
-* **Hudan Studiawan** (Undergraduate Thesis Adviser) - [Github](https://github.com/studiawan)
+You can also see directly at the [code](examples/example_01.py)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE) file for details
