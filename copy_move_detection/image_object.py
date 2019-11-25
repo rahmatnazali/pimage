@@ -1,17 +1,13 @@
 import copy_move_detection.container
 import copy_move_detection.block
 
-# import PIL
 from PIL import Image
-import scipy.misc
 import imageio
 import tqdm
 
 import numpy as np
 import math
 import time
-
-# import __builtin__
 
 
 class ImageObject(object):
