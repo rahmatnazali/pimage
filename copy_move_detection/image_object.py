@@ -285,8 +285,6 @@ class ImageObject(object):
 
         timestamp = time.strftime("%Y%m%d_%H%M%S")
 
-        # scipy.misc.imsave(self.image_output_directory + timestamp + "_" + self.image_path, groundtruth_image)
-        # scipy.misc.imsave(self.image_output_directory + timestamp + "_lined_" + self.image_path, lined_image)
         imageio.imwrite(self.image_output_directory + timestamp + "_" + self.image_path, groundtruth_image)
         imageio.imwrite(self.image_output_directory + timestamp + "_lined_" + self.image_path, lined_image)
 
