@@ -15,10 +15,10 @@ class ImageObject(object):
     Object to contains a single image, then detects a fraud in it
     """
 
-    def __init__(self, image_directory, image_name, block_dimension, output_directory):
+    def __init__(self, input_path, image_name, output_directory, block_dimension):
         """
         Constructor to initialize the algorithm's parameters
-        :param image_directory: direktori file citra
+        :param input_path: direktori file citra
         :param image_name: nama file citra
         :param block_dimension: ukuran blok dimensi (ex:32, 64, 128)
         :param output_directory: direktori untuk hasil deteksi
@@ -30,8 +30,8 @@ class ImageObject(object):
 
         # image parameter
         self.image_output_directory = output_directory
-        self.image_path = image_name
-        self.image_data = Image.open(image_directory + image_name)
+        self.image_name = image_name
+        self.image_data = Image.open(input_path)
         self.image_width, self.image_height = self.image_data.size  # height = vertical, width = horizontal
 
         if self.image_data.mode != 'L':  # L means grayscale
@@ -281,8 +281,7 @@ class ImageObject(object):
 
         timestamp = time.strftime("%Y%m%d_%H%M%S")
 
-        imageio.imwrite(self.image_output_directory + timestamp + "_" + self.image_path, groundtruth_image)
-        imageio.imwrite(self.image_output_directory + timestamp + "_lined_" + self.image_path, lined_image)
+        imageio.imwrite(self.image_output_directory / (timestamp + "_" + self.image_name), groundtruth_image)
+        imageio.imwrite(self.image_output_directory / (timestamp + "_lined_" + self.image_name), lined_image)
 
-
-        return self.image_output_directory + timestamp + "_lined_" + self.image_path
+        return self.image_output_directory + timestamp + "_lined_" + self.image_name
