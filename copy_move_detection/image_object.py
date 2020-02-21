@@ -284,4 +284,4 @@ class ImageObject(object):
         imageio.imwrite(self.image_output_directory / (timestamp + "_" + self.image_name), groundtruth_image)
         imageio.imwrite(self.image_output_directory / (timestamp + "_lined_" + self.image_name), lined_image)
 
-        return self.image_output_directory + timestamp + "_lined_" + self.image_name
+        return self.image_output_directory / timestamp / "_lined_" / self.image_name
