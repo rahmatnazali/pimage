@@ -216,12 +216,22 @@ class ImageObject(object):
         groundtruth_image = np.zeros((self.image_height, self.image_width))
         lined_image = np.array(self.image_data.convert('RGB'))
 
-        for key in sorted(self.offset_dictionary,
+        sorted_offset = sorted(self.offset_dictionary,
                           key=lambda key: len(self.offset_dictionary[key]),
-                          reverse=True):
+                          reverse=True)
+
+        is_pair_found = False
+
+        for key in sorted_offset:
             if self.offset_dictionary[key].__len__() < self.Nf * 2:
                 break
+
+            if is_pair_found == False:
+                print('Found pair(s) of possible fraud attack:')
+                is_pair_found = True
+
             print(key, self.offset_dictionary[key].__len__())
+
             for i in range(self.offset_dictionary[key].__len__()):
                 # The original image (grayscale)
                 for j in range(self.offset_dictionary[key][i][1],
@@ -229,6 +239,9 @@ class ImageObject(object):
                     for k in range(self.offset_dictionary[key][i][0],
                                    self.offset_dictionary[key][i][0] + self.block_dimension):
                         groundtruth_image[j][k] = 255
+
+        if is_pair_found == False:
+            print('No pair of possible fraud attack found.')
 
         # creating a line edge from the original image (for the visual purpose)
         for x_coordinate in range(2, self.image_height - 2):
