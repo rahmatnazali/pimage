@@ -1,6 +1,6 @@
 # Copy-Move Detection on Digital Image using Python
 
-**Old Python 2 version**: You can find the old module written with python 2 on [this repository](https://github.com/rahmatnazali/image-copy-move-detection-python2). This repository now host the python 3 version
+**Old Python 2 version**:This repository now host the python 3 version. You can find the old module written with python 2 on this [repository](https://github.com/rahmatnazali/image-copy-move-detection-python2).
 
 ## Description
 This is an implementation of python script to detect a copy-move manipulation attack on digital image based on Overlapping Blocks.
