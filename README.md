@@ -62,7 +62,7 @@ You can also see directly at the [code](examples/example_01.py).
 This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE) file for details
 
 ## Acknowledgments
-I mainly learnt how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html) written by Jan Erik Solem, but the page has been erased. Shortly after knowing the page was gone, I found that the author are now founder & CEO at [Mapillary](https://www.mapillary.com/) (Hail, and hat tip).
+I mainly learnt how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html) written by Jan Erik Solem, but the page has been deleted. Shortly after knowing the page was gone, I found that the author are now founder & CEO at [Mapillary](https://www.mapillary.com/) (Hail, and hat tip).
 
 ## Support
 
