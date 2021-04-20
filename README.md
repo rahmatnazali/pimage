@@ -1,5 +1,7 @@
 # Copy-Move Detection on Digital Image using Python
 
+**UPDATE 16 April 2021**: This project has been properly re-written as paper and published at Springer. Some more detailed theory and step by step are explained there so probably want to check it out too. You can find it [here](https://link.springer.com/chapter/10.1007%2F978-3-030-73689-7_39).
+
 **Old Python 2 version**:This repository now host the python 3 version. You can find the old module written with python 2 on this [repository](https://github.com/rahmatnazali/image-copy-move-detection-python2).
 
 ## Description
@@ -23,7 +25,7 @@ The principal component will bring similar block closer, while the seven feature
 
 By modifying the algorithms like mentioned above, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
 
-This project was used for my Undergraduate Thesis that you can find it in [here](http://repository.its.ac.id/1801/), but please note that it was written in Indonesian.
+This project was used for my Undergraduate Thesis that you can find it in [here](http://repository.its.ac.id/1801/), but please note that it was written in Indonesian. Now it has been re-written as paper and published at Springer that you can find it [here](https://link.springer.com/chapter/10.1007%2F978-3-030-73689-7_39), feel free to cite!
 
 ## Example image
 ### Original image
