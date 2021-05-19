@@ -141,17 +141,14 @@ class ImageObject(object):
         time.sleep(0.1)
         feature_container_length = self.features_container.get_length()
 
-        # todo: https://github.com/rahmatnazali/image-copy-move-detection/issues/5
-        for i in tqdm.tqdm(range(feature_container_length)):
-            for j in range(i + 1, feature_container_length):
-                result = self.is_valid(i, j)
-                if result[0]:
-                    self.add_dictionary(self.features_container.container[i][0],
-                                        self.features_container.container[j][0],
-                                        result[1])
-                    z += 1
-                else:
-                    break
+        for i in tqdm.tqdm(range(feature_container_length - 1)):
+            j = i + 1
+            result = self.is_valid(i, j)
+            if result[0]:
+                self.add_dictionary(self.features_container.container[i][0],
+                                    self.features_container.container[j][0],
+                                    result[1])
+                z += 1
 
     def is_valid(self, first_block, second_block):
         """
