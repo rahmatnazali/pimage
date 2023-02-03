@@ -6,7 +6,7 @@ import numpy
 from PIL import Image
 from tqdm import tqdm
 
-from block import Blocks
+from . import block
 from container import Container
 
 
@@ -116,7 +116,7 @@ class ImageObject(object):
                     image_block_rgb = self.image_data.crop((i, j, i + self.block_dimension, j + self.block_dimension))
                     image_block_grayscale = self.image_grayscale.crop(
                         (i, j, i + self.block_dimension, j + self.block_dimension))
-                    image_block = Blocks(image_block_grayscale, image_block_rgb, i, j, self.block_dimension)
+                    image_block = block.Blocks(image_block_grayscale, image_block_rgb, i, j, self.block_dimension)
                     self.features_container.append_block(image_block.compute_block())
         else:
             for i in range(image_width_overlap + 1):
@@ -124,7 +124,7 @@ class ImageObject(object):
                     image_block_grayscale = self.image_data.crop(
                         (i, j, i + self.block_dimension, j + self.block_dimension)
                     )
-                    image_block = Blocks(image_block_grayscale, None, i, j, self.block_dimension)
+                    image_block = block.Blocks(image_block_grayscale, None, i, j, self.block_dimension)
                     self.features_container.append_block(image_block.compute_block())
 
     def sort(self):
