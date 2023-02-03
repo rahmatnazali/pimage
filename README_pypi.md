@@ -1,5 +1,7 @@
 This is a python package for detecting copy-move attack on a digital image.
 
+More documentation is detailed on the [Github page](https://github.com/rahmatnazali/pimage).
+
 ## Example usage
 
 ### API for the detection process
@@ -39,36 +41,4 @@ To quickly run the detection command for your image, the `copy_move.detect_and_e
 from pimage import copy_move
 
 copy_move.detect_and_export('dataset_example_blur.png', 'output', block_size=32)
-```
-
-## Determining the `block_size`
-
-The first algorithm use block size of `32` pixels so this package will use the same value by default. Increasing the size means faster run time at a reduced accuracy. Analogically, decreasing the size means longer run time with increased accuracy.
-
-## Verbose mode
-
-When running `copy_move.detect()` or `copy_move.detect_and_export()`, you can pass `verbose=True` to output 
-the status of each step. The default value will be `False` and nothing will be printed.
-
-Example of the verbose output:
-
-```
-Processing: dataset/multi_paste/cattle_gcs500_copy_rb5.png
-Step 1 of 4: Object and variable initialization
-Step 2 of 4: Computing characteristic features
-100%|██████████| 609/609 [04:14<00:00,  2.39it/s]
-Step 3 of 4:Pairing image blocks
-100%|██████████| 241163/241163 [00:00<00:00, 816659.95it/s]
-Step 4 of 4: Image reconstruction
-Found pair(s) of possible fraud attack:
-((-57, -123), 2178)
-((-11, 140), 2178)
-((-280, 114), 2178)
-((-34, -305), 2178)
-((-37, 148), 2178)
-Computing time : 254.81 second
-Sorting time   : 0.89 second
-Analyzing time : 0.3 second
-Image creation : 1.4 second
-Total time    : 0:04:17 second 
 ```
