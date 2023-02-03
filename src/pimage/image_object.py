@@ -1,5 +1,6 @@
 import math
 import time
+from typing import List, Tuple
 
 import numpy
 from PIL import Image
@@ -14,7 +15,7 @@ class ImageObject(object):
     Object to contain single image and the detection process
     """
 
-    def __init__(self, input_path, block_dimension):
+    def __init__(self, input_path, block_dimension, verbose=False):
         """
         Constructor to initialize the algorithm's parameters
         :param input_path: image input path
@@ -22,8 +23,11 @@ class ImageObject(object):
         but takes more time (ex:32, 64, 128).
         """
 
-        print(input_path)
-        print("Step 1 of 4: Object and variable initialization")
+        self.verbose = verbose
+
+        if self.verbose:
+            print(f"Processing: {input_path}")
+            print("Step 1 of 4: Object and variable initialization")
 
         # image parameter
         self.image_data = Image.open(input_path)
@@ -65,7 +69,7 @@ class ImageObject(object):
         self.block_pair_container = Container()
         self.offset_dictionary = {}
 
-    def run(self):
+    def run(self) -> Tuple[List, numpy.ndarray, numpy.ndarray]:
         """
         Run the created algorithm
         :return: None
@@ -79,32 +83,35 @@ class ImageObject(object):
         timestamp_after_sorting = time.time()
         self.analyze()
         timestamp_after_analyze = time.time()
-        image_result_path = self.reconstruct()
+        detection_result = self.reconstruct()
         timestamp_after_image_creation = time.time()
 
-        print(f"Computing time : {round(timestamp_after_computing - start_timestamp, 2)} second")
-        print(f"Sorting time   : {round(timestamp_after_sorting - timestamp_after_computing, 2)} second")
-        print(f"Analyzing time : {round(timestamp_after_analyze - timestamp_after_sorting, 2)} second")
-        print(f"Image creation : {round(timestamp_after_image_creation - timestamp_after_analyze, 2)} second")
+        if self.verbose:
+            print(f"Computing time : {round(timestamp_after_computing - start_timestamp, 2)} second")
+            print(f"Sorting time   : {round(timestamp_after_sorting - timestamp_after_computing, 2)} second")
+            print(f"Analyzing time : {round(timestamp_after_analyze - timestamp_after_sorting, 2)} second")
+            print(f"Image creation : {round(timestamp_after_image_creation - timestamp_after_analyze, 2)} second")
 
-        total_running_time_in_second = timestamp_after_image_creation - start_timestamp
-        total_minute, total_second = divmod(total_running_time_in_second, 60)
-        total_hour, total_minute = divmod(total_minute, 60)
-        print("Total time    : %d:%02d:%02d second" % (total_hour, total_minute, total_second), '\n')
-        return image_result_path
+            total_running_time_in_second = timestamp_after_image_creation - start_timestamp
+            total_minute, total_second = divmod(total_running_time_in_second, 60)
+            total_hour, total_minute = divmod(total_minute, 60)
+            print("Total time    : %d:%02d:%02d second" % (total_hour, total_minute, total_second), '\n')
+
+        return detection_result
 
     def compute(self):
         """
         To compute the characteristic features of image block
         :return: None
         """
-        print("Step 2 of 4: Computing characteristic features")
+        if self.verbose:
+            print("Step 2 of 4: Computing characteristic features")
 
         image_width_overlap = self.image_width - self.block_dimension
         image_height_overlap = self.image_height - self.block_dimension
 
         if self.is_rgb_image:
-            for i in tqdm(range(0, image_width_overlap + 1, 1)):
+            for i in tqdm(range(0, image_width_overlap + 1, 1), disable=not self.verbose):
                 for j in range(0, image_height_overlap + 1, 1):
                     image_block_rgb = self.image_data.crop((i, j, i + self.block_dimension, j + self.block_dimension))
                     image_block_grayscale = self.image_grayscale.crop(
@@ -132,12 +139,13 @@ class ImageObject(object):
         To analyze pairs of image blocks
         :return: None
         """
-        print("Step 3 of 4:Pairing image blocks")
+        if self.verbose:
+            print("Step 3 of 4:Pairing image blocks")
+
         z = 0
-        time.sleep(0.1)
         feature_container_length = self.features_container.get_length()
 
-        for i in tqdm(range(feature_container_length - 1)):
+        for i in tqdm(range(feature_container_length - 1), disable=not self.verbose):
             j = i + 1
             result = self.is_valid(i, j)
             if result[0]:
@@ -203,7 +211,8 @@ class ImageObject(object):
         """
         Reconstruct the image according to the fraud detectionr esult
         """
-        print("Step 4 of 4: Image reconstruction")
+        if self.verbose:
+            print("Step 4 of 4: Image reconstruction")
 
         # create an array as the canvas of the final image
         ground_truth_image = numpy.zeros((self.image_height, self.image_width))
@@ -213,17 +222,15 @@ class ImageObject(object):
                                key=lambda offset_key: len(self.offset_dictionary[offset_key]),
                                reverse=True)
 
-        is_pair_found = False
+        fraud_pair_list = []
 
         for key in sorted_offset:
             if self.offset_dictionary[key].__len__() < self.Nf * 2:
                 break
 
-            if not is_pair_found:
-                print('Found pair(s) of possible fraud attack:')
-                is_pair_found = True
-
-            print(key, self.offset_dictionary[key].__len__())
+            fraud_pair_list.append(
+                (key, self.offset_dictionary[key].__len__())
+            )
 
             for i in range(self.offset_dictionary[key].__len__()):
                 # The original image (grayscale)
@@ -233,8 +240,13 @@ class ImageObject(object):
                                    self.offset_dictionary[key][i][0] + self.block_dimension):
                         ground_truth_image[j][k] = 255
 
-        if not is_pair_found:
-            print('No pair of possible fraud attack found.')
+        if self.verbose:
+            if len(fraud_pair_list):
+                print('Found pair(s) of possible fraud attack:')
+                for pair in fraud_pair_list:
+                    print(pair)
+            else:
+                print('No pair of possible fraud attack found.')
 
         # creating a line edge from the original image (for the visual purpose)
         for x_coordinate in range(2, self.image_height - 2):
@@ -286,6 +298,7 @@ class ImageObject(object):
                         lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
 
         return (
+            fraud_pair_list,
             ground_truth_image.astype(numpy.uint8),
-            lined_image.astype(numpy.uint8)
+            lined_image.astype(numpy.uint8),
         )
