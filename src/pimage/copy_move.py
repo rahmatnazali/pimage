@@ -5,7 +5,7 @@ from typing import Tuple, List
 import imageio
 import numpy
 
-import image_object
+from . import image_object
 
 
 def detect(input_path, block_size=32, verbose=False) -> Tuple[List, numpy.ndarray, numpy.ndarray]:
