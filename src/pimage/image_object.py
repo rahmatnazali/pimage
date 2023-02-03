@@ -38,7 +38,8 @@ class ImageObject(object):
             self.is_rgb_image = True
             self.image_data = self.image_data.convert('RGB')
             rgb_image_pixels = self.image_data.load()
-            self.image_grayscale = self.image_data.convert('L')  # creates a grayscale version of current image to be used later
+            # creates a grayscale version of current image to be used later
+            self.image_grayscale = self.image_data.convert('L')
             grayscale_image_pixels = self.image_grayscale.load()
 
             for y_coordinate in range(0, self.image_height):
@@ -118,7 +119,9 @@ class ImageObject(object):
         else:
             for i in range(image_width_overlap + 1):
                 for j in range(image_height_overlap + 1):
-                    image_block_grayscale = self.image_data.crop((i, j, i + self.block_dimension, j + self.block_dimension))
+                    image_block_grayscale = self.image_data.crop(
+                        (i, j, i + self.block_dimension, j + self.block_dimension)
+                    )
                     image_block = Blocks(image_block_grayscale, None, i, j, self.block_dimension)
                     self.features_container.append_block(image_block.compute_block())
 
@@ -212,8 +215,8 @@ class ImageObject(object):
         lined_image = numpy.array(self.image_data.convert('RGB'))
 
         sorted_offset = sorted(self.offset_dictionary,
-                          key=lambda key: len(self.offset_dictionary[key]),
-                          reverse=True)
+                               key=lambda offset_key: len(self.offset_dictionary[offset_key]),
+                               reverse=True)
 
         is_pair_found = False
 
@@ -221,7 +224,7 @@ class ImageObject(object):
             if self.offset_dictionary[key].__len__() < self.Nf * 2:
                 break
 
-            if is_pair_found == False:
+            if not is_pair_found:
                 print('Found pair(s) of possible fraud attack:')
                 is_pair_found = True
 
@@ -235,57 +238,57 @@ class ImageObject(object):
                                    self.offset_dictionary[key][i][0] + self.block_dimension):
                         ground_truth_image[j][k] = 255
 
-        if is_pair_found == False:
+        if not is_pair_found:
             print('No pair of possible fraud attack found.')
 
         # creating a line edge from the original image (for the visual purpose)
         for x_coordinate in range(2, self.image_height - 2):
-            for y_cordinate in range(2, self.image_width - 2):
-                if ground_truth_image[x_coordinate, y_cordinate] == 255 and \
-                        (ground_truth_image[x_coordinate + 1, y_cordinate] == 0 or
-                         ground_truth_image[x_coordinate - 1, y_cordinate] == 0 or
-                         ground_truth_image[x_coordinate, y_cordinate + 1] == 0 or
-                         ground_truth_image[x_coordinate, y_cordinate - 1] == 0 or
-                         ground_truth_image[x_coordinate - 1, y_cordinate + 1] == 0 or
-                         ground_truth_image[x_coordinate + 1, y_cordinate + 1] == 0 or
-                         ground_truth_image[x_coordinate - 1, y_cordinate - 1] == 0 or
-                         ground_truth_image[x_coordinate + 1, y_cordinate - 1] == 0):
+            for y_coordinate in range(2, self.image_width - 2):
+                if ground_truth_image[x_coordinate, y_coordinate] == 255 and \
+                        (ground_truth_image[x_coordinate + 1, y_coordinate] == 0 or
+                         ground_truth_image[x_coordinate - 1, y_coordinate] == 0 or
+                         ground_truth_image[x_coordinate, y_coordinate + 1] == 0 or
+                         ground_truth_image[x_coordinate, y_coordinate - 1] == 0 or
+                         ground_truth_image[x_coordinate - 1, y_coordinate + 1] == 0 or
+                         ground_truth_image[x_coordinate + 1, y_coordinate + 1] == 0 or
+                         ground_truth_image[x_coordinate - 1, y_coordinate - 1] == 0 or
+                         ground_truth_image[x_coordinate + 1, y_coordinate - 1] == 0):
 
                     # creating the edge line, respectively left-upper, right-upper, left-down, right-down
-                    if ground_truth_image[x_coordinate - 1, y_cordinate] == 0 and \
-                            ground_truth_image[x_coordinate, y_cordinate - 1] == 0 and \
-                            ground_truth_image[x_coordinate - 1, y_cordinate - 1] == 0:
-                        lined_image[x_coordinate - 2:x_coordinate, y_cordinate, 1] = 255
-                        lined_image[x_coordinate, y_cordinate - 2:y_cordinate, 1] = 255
-                        lined_image[x_coordinate - 2:x_coordinate, y_cordinate - 2:y_cordinate, 1] = 255
-                    elif ground_truth_image[x_coordinate + 1, y_cordinate] == 0 and \
-                            ground_truth_image[x_coordinate, y_cordinate - 1] == 0 and \
-                            ground_truth_image[x_coordinate + 1, y_cordinate - 1] == 0:
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_cordinate, 1] = 255
-                        lined_image[x_coordinate, y_cordinate - 2:y_cordinate, 1] = 255
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_cordinate - 2:y_cordinate, 1] = 255
-                    elif ground_truth_image[x_coordinate - 1, y_cordinate] == 0 and \
-                            ground_truth_image[x_coordinate, y_cordinate + 1] == 0 and \
-                            ground_truth_image[x_coordinate - 1, y_cordinate + 1] == 0:
-                        lined_image[x_coordinate - 2:x_coordinate, y_cordinate, 1] = 255
-                        lined_image[x_coordinate, y_cordinate + 1:y_cordinate + 3, 1] = 255
-                        lined_image[x_coordinate - 2:x_coordinate, y_cordinate + 1:y_cordinate + 3, 1] = 255
-                    elif ground_truth_image[x_coordinate + 1, y_cordinate] == 0 and \
-                            ground_truth_image[x_coordinate, y_cordinate + 1] == 0 and \
-                            ground_truth_image[x_coordinate + 1, y_cordinate + 1] == 0:
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_cordinate, 1] = 255
-                        lined_image[x_coordinate, y_cordinate + 1:y_cordinate + 3, 1] = 255
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_cordinate + 1:y_cordinate + 3, 1] = 255
+                    if ground_truth_image[x_coordinate - 1, y_coordinate] == 0 and \
+                            ground_truth_image[x_coordinate, y_coordinate - 1] == 0 and \
+                            ground_truth_image[x_coordinate - 1, y_coordinate - 1] == 0:
+                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
+                        lined_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                    elif ground_truth_image[x_coordinate + 1, y_coordinate] == 0 and \
+                            ground_truth_image[x_coordinate, y_coordinate - 1] == 0 and \
+                            ground_truth_image[x_coordinate + 1, y_coordinate - 1] == 0:
+                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
+                        lined_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate - 2:y_coordinate, 1] = 255
+                    elif ground_truth_image[x_coordinate - 1, y_coordinate] == 0 and \
+                            ground_truth_image[x_coordinate, y_coordinate + 1] == 0 and \
+                            ground_truth_image[x_coordinate - 1, y_coordinate + 1] == 0:
+                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
+                        lined_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                    elif ground_truth_image[x_coordinate + 1, y_coordinate] == 0 and \
+                            ground_truth_image[x_coordinate, y_coordinate + 1] == 0 and \
+                            ground_truth_image[x_coordinate + 1, y_coordinate + 1] == 0:
+                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
+                        lined_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate + 1:y_coordinate + 3, 1] = 255
 
                     # creating the straigh line, respectively upper, down, left, right line
-                    elif ground_truth_image[x_coordinate, y_cordinate + 1] == 0:
-                        lined_image[x_coordinate, y_cordinate + 1:y_cordinate + 3, 1] = 255
-                    elif ground_truth_image[x_coordinate, y_cordinate - 1] == 0:
-                        lined_image[x_coordinate, y_cordinate - 2:y_cordinate, 1] = 255
-                    elif ground_truth_image[x_coordinate - 1, y_cordinate] == 0:
-                        lined_image[x_coordinate - 2:x_coordinate, y_cordinate, 1] = 255
-                    elif ground_truth_image[x_coordinate + 1, y_cordinate] == 0:
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_cordinate, 1] = 255
+                    elif ground_truth_image[x_coordinate, y_coordinate + 1] == 0:
+                        lined_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                    elif ground_truth_image[x_coordinate, y_coordinate - 1] == 0:
+                        lined_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                    elif ground_truth_image[x_coordinate - 1, y_coordinate] == 0:
+                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
+                    elif ground_truth_image[x_coordinate + 1, y_coordinate] == 0:
+                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
 
         timestamp = time.strftime("%Y%m%d_%H%M%S")
 
