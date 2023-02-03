@@ -1,6 +1,6 @@
 class Container(object):
     """
-    Object to contains the computation result
+    Object to contain the computation result
     """
 
     def __init__(self):
@@ -32,12 +32,13 @@ class Container(object):
         Sort all the container's data based on certain key
         :return: None
         """
-        self.container = sorted(self.container, key=lambda x:(x[1], x[2]))
+        self.container = sorted(self.container, key=lambda x: (x[1], x[2]))
         return
 
     """
     Functions for debug purpose
     """
+
     def print_all_container(self):
         """
         Prints all the elements inside the container
