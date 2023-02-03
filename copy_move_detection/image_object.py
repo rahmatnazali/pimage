@@ -26,7 +26,7 @@ class ImageObject(object):
         """
 
         print(image_name)
-        print("Step 1 of 4: Object and variable initialization, ", end='')
+        print("Step 1 of 4: Object and variable initialization")
 
         # image parameter
         self.image_output_directory = output_directory
@@ -64,7 +64,7 @@ class ImageObject(object):
         self.t1 = 2.80
         self.t2 = 0.02
 
-        print(self.Nb, self.is_rgb_image)
+        print(f"Nb: {self.Nb}. Is RGB: {self.is_rgb_image}")
 
         # container initialization to later contains several data
         self.features_container = copy_move_detection.container.Container()
