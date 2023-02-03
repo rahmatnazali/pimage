@@ -1,8 +1,8 @@
-# Copy-Move Detection on Digital Image using Python
+This is a python package for detecting copy-move attack on a digital image.
 
-**UPDATE 16 April 2021**: This project has been properly re-written as paper and published at Springer. Some more detailed theory and step by step are explained there so probably want to check it out too. You can find it [here](https://link.springer.com/chapter/10.1007%2F978-3-030-73689-7_39).
+This project is part of our paper that [has been published at Springer](https://link.springer.com/chapter/10.1007%2F978-3-030-73689-7_39). More detailed theories and steps are explained there.
 
-**Old Python 2 version**:This repository now host the python 3 version. You can find the old module written with python 2 on this [repository](https://github.com/rahmatnazali/image-copy-move-detection-python2).
+The project is formerly written with Python 2, which is now left unmaintained [here](https://github.com/rahmatnazali/image-copy-move-detection-python2).
 
 ## Description
 This is an implementation of python script to detect a copy-move manipulation attack on digital image based on Overlapping Blocks.
