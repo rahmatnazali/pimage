@@ -7,7 +7,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from . import block
-from container import Container
+from . import container
 
 
 class ImageObject(object):
@@ -65,8 +65,8 @@ class ImageObject(object):
         self.t2 = 0.02
 
         # container initialization to later contains several data
-        self.features_container = Container()
-        self.block_pair_container = Container()
+        self.features_container = container.Container()
+        self.block_pair_container = container.Container()
         self.offset_dictionary = {}
 
     def run(self) -> Tuple[List, numpy.ndarray, numpy.ndarray]:
