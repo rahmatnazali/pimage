@@ -1,7 +1,6 @@
 import math
 import time
 
-import imageio
 import numpy
 from PIL import Image
 from tqdm import tqdm
@@ -15,22 +14,18 @@ class ImageObject(object):
     Object to contain single image and the detection process
     """
 
-    def __init__(self, input_path, image_name, output_directory, block_dimension):
+    def __init__(self, input_path, block_dimension):
         """
         Constructor to initialize the algorithm's parameters
         :param input_path: image input path
-        :param image_name: image name
-        :param block_dimension: block dimension (ex:32, 64, 128)
-        :param output_directory: output path
-        :return: None
+        :param block_dimension: The smaller the block size, the more accurate the result is,
+        but takes more time (ex:32, 64, 128).
         """
 
-        print(image_name)
+        print(input_path)
         print("Step 1 of 4: Object and variable initialization")
 
         # image parameter
-        self.image_output_directory = output_directory
-        self.image_name = image_name
         self.image_data = Image.open(input_path)
         self.image_width, self.image_height = self.image_data.size  # height = vertical, width = horizontal
 
@@ -290,13 +285,7 @@ class ImageObject(object):
                     elif ground_truth_image[x_coordinate + 1, y_coordinate] == 0:
                         lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
 
-        timestamp = time.strftime("%Y%m%d_%H%M%S")
-
-        imageio.imwrite(
-            self.image_output_directory / (timestamp + "_" + self.image_name),
-            ground_truth_image.astype(numpy.uint8))
-        imageio.imwrite(
-            self.image_output_directory / (timestamp + "_lined_" + self.image_name),
-            lined_image.astype(numpy.uint8))
-
-        return self.image_output_directory / timestamp / "_lined_" / self.image_name
+        return (
+            ground_truth_image.astype(numpy.uint8),
+            lined_image.astype(numpy.uint8)
+        )
