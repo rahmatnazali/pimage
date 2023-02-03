@@ -31,11 +31,6 @@ By doing so, the new algorithm will have a tolerance regarding variety of the in
 ### Example result after detection
 ![Result image](output/20191125_094809_lined_dataset_example_blur.png)
 
-## GUI
-![GUI screenshoot](assets/gui_result.PNG?raw=true)
-
-**Note**: This version does not support GUI. If you want to implement it, you can visit the old repo mentioned above for the snippets.
-
 ## Getting Started
 
 Assuming you already have Python 3.x on your machine:
