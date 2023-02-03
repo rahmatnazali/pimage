@@ -1,5 +1,7 @@
-import copy_move_detection.image_object
 from pathlib import Path
+
+import image_object
+
 
 def detect(input_path, output_path, block_size=32):
     """
@@ -13,17 +15,22 @@ def detect(input_path, output_path, block_size=32):
 
     input_path = Path(input_path)
     filename = input_path.name
-    output_path= Path(output_path)
+    output_path = Path(output_path)
 
     if not input_path.exists():
-        print("Error: Source Directory did not exist.")
+        print(f"Error: Source Directory \"{str(input_path)}\" did not exist.")
         exit(1)
     elif not output_path.exists():
-        print("Error: Output Directory did not exist.")
+        print(f"Error: Output Directory \"{str(output_path)}\" did not exist.")
         exit(1)
 
-    single_image = copy_move_detection.image_object.ImageObject(input_path, filename, output_path, block_size)
+    single_image = image_object.ImageObject(input_path, filename, output_path, block_size)
     image_result_path = single_image.run()
 
     print("Done.")
     return image_result_path
+
+
+if __name__ == "__main__":
+    # example script
+    detect('../../assets/dataset_example_blur.png', '../../output/', block_size=32)
