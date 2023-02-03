@@ -87,10 +87,10 @@ class ImageObject(object):
         image_result_path = self.reconstruct()
         timestamp_after_image_creation = time.time()
 
-        print("Computing time :", timestamp_after_computing - start_timestamp, "second")
-        print("Sorting time   :", timestamp_after_sorting - timestamp_after_computing, "second")
-        print("Analyzing time :", timestamp_after_analyze - timestamp_after_sorting, "second")
-        print("Image creation :", timestamp_after_image_creation - timestamp_after_analyze, "second")
+        print(f"Computing time : {round(timestamp_after_computing - start_timestamp, 2)} second")
+        print(f"Sorting time   : {round(timestamp_after_sorting - timestamp_after_computing, 2)} second")
+        print(f"Analyzing time : {round(timestamp_after_analyze - timestamp_after_sorting, 2)} second")
+        print(f"Image creation : {round(timestamp_after_image_creation - timestamp_after_analyze, 2)} second")
 
         total_running_time_in_second = timestamp_after_image_creation - start_timestamp
         total_minute, total_second = divmod(total_running_time_in_second, 60)
