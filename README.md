@@ -49,3 +49,31 @@ copy_move.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32
 ```
 
 You can also see directly at the [example code](example/example.py).
+
+## Verbose mode
+
+When running `copy_move.detect()` or `copy_move.detect_and_export()`, you can pass `verbose=True` to output 
+the status of each step. The default value will be `False` and nothing will be printed.
+
+Example of the verbose output:
+
+```
+Processing: dataset/multi_paste/cattle_gcs500_copy_rb5.png
+Step 1 of 4: Object and variable initialization
+Step 2 of 4: Computing characteristic features
+100%|██████████| 609/609 [04:14<00:00,  2.39it/s]
+Step 3 of 4:Pairing image blocks
+100%|██████████| 241163/241163 [00:00<00:00, 816659.95it/s]
+Step 4 of 4: Image reconstruction
+Found pair(s) of possible fraud attack:
+((-57, -123), 2178)
+((-11, 140), 2178)
+((-280, 114), 2178)
+((-34, -305), 2178)
+((-37, 148), 2178)
+Computing time : 254.81 second
+Sorting time   : 0.89 second
+Analyzing time : 0.3 second
+Image creation : 1.4 second
+Total time    : 0:04:17 second 
+```
