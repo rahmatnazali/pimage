@@ -23,16 +23,6 @@ The principal component will bring similar block closer, while the seven feature
 
 By doing so, the new algorithm will have a tolerance regarding variety of the input image. The detection result will be relatively smooth and accurate for any type of image, with a trade-off in run time as we basically run two algorithm.
 
-## Example image
-### Original image
-![Original image](assets/dataset_example.png?raw=true) 
-### Forgered image
-![Forgered image](assets/dataset_example_blur.png?raw=true)
-### Example result after detection
-![Result image](output/20191125_094809_lined_dataset_example_blur.png)
-
-Another example of the result can be seen in the `output` directory.
-
 ## Getting Started
 
 Assuming you already have Python 3.x on your machine:
@@ -40,15 +30,50 @@ Assuming you already have Python 3.x on your machine:
 - create a [virtual environment](https://docs.python.org/3/library/venv.html) and enter into it
 - run `pip3 install -r requirements.txt`
 
-## Example
+## Example usage
+
+### API for the detection process
 
 ```python3
 from pimage import copy_move
 
-copy_move.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32)
+fraud_list, ground_truth_image, result_image = copy_move.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32)
 ```
 
-You can also see directly at the [example code](example/example.py).
+- `fraud_list` will be the list of `(x_coordinate, y_coordinate)` and the number of the blocks. If the list is not empty, we can assume that the image is being tampered. For example:
+    ```
+    ((-57, -123), 2178)
+    ((-11, 140), 2178)
+    ((-280, 114), 2178)
+    ((-34, -305), 2178)
+    ((-37, 148), 2178)
+    ```
+  means there are 5 possible matched/identical region with 2178 overlapping blocks on each of it
+- `ground_truth_image` contains the black and white ground truth of the detection result
+- `result_image` is the given image where the possible fraud region will be bordered (if any)
+
+`ground_truth_image` and `result_image` will be formatted as `numpy.ndarray`. It can further be processed. For example, it can be exported as image like so:
+
+```python
+import imageio
+
+imageio.imwrite("result_image.png", result_image)
+imageio.imwrite("ground_truth_image.png", ground_truth_image)
+```
+
+### Quick command to detect an image
+
+To quickly run the detection command for your image, the `copy_move.detect_and_export()` is also provided. The command is identical with `.detect()` but it also save the result to desired output path.
+
+```python
+from pimage import copy_move
+
+copy_move.detect_and_export('dataset_example_blur.png', 'output', block_size=32)
+```
+
+## Determining the `block_size`
+
+The first algorithm use block size of `32` pixels so this package will use the same value by default. Increasing the size means faster run time at a reduced accuracy. Analogically, decreasing the size means longer run time with increased accuracy.
 
 ## Verbose mode
 
@@ -77,3 +102,13 @@ Analyzing time : 0.3 second
 Image creation : 1.4 second
 Total time    : 0:04:17 second 
 ```
+
+## Example image
+### Original image
+![Original image](assets/dataset_example.png?raw=true) 
+### Forgered image
+![Forgered image](assets/dataset_example_blur.png?raw=true)
+### Example result after detection
+![Result image](output/20191125_094809_lined_dataset_example_blur.png)
+
+Another example of the result can be seen in the `output` directory.
