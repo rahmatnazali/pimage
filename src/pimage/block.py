@@ -3,7 +3,7 @@ import numpy
 from sklearn.decomposition import PCA
 
 
-class Blocks(object):
+class Block(object):
     """
     Contains a single image block and handle the calculation of characteristic features
     """
