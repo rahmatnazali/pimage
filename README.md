@@ -15,7 +15,7 @@ We know that the first algorithm use `coordinate` and `principal_component` feat
 
 Knowing that, we then attempt to give a tolerance by merging all the features like so:
 
-![Modification diagram](/assets/modification_diagram.PNG?raw=true) 
+![Modification diagram](assets/modification_diagram.PNG?raw=true) 
 
 The attributes are saved as one object and lexicographical sorting is applied to the pricipal component and the seven features.
 
@@ -25,14 +25,14 @@ By doing so, the new algorithm will have a tolerance regarding variety of the in
 
 ## Example image
 ### Original image
-![Original image](/assets/dataset_example.png?raw=true) 
+![Original image](assets/dataset_example.png?raw=true) 
 ### Forgered image
-![Forgered image](/assets/dataset_example_blur.png?raw=true)
+![Forgered image](assets/dataset_example_blur.png?raw=true)
 ### Example result after detection
-![Result image](/output/20191125_094809_lined_dataset_example_blur.png)
+![Result image](output/20191125_094809_lined_dataset_example_blur.png)
 
 ## GUI
-![GUI screenshoot](/assets/gui_result.PNG?raw=true)
+![GUI screenshoot](assets/gui_result.PNG?raw=true)
 
 **Note**: This version does not support GUI. If you want to implement it, you can visit the old repo mentioned above for the snippets.
 
