@@ -292,7 +292,11 @@ class ImageObject(object):
 
         timestamp = time.strftime("%Y%m%d_%H%M%S")
 
-        imageio.imwrite(self.image_output_directory / (timestamp + "_" + self.image_name), ground_truth_image)
-        imageio.imwrite(self.image_output_directory / (timestamp + "_lined_" + self.image_name), lined_image)
+        imageio.imwrite(
+            self.image_output_directory / (timestamp + "_" + self.image_name),
+            ground_truth_image.astype(numpy.uint8))
+        imageio.imwrite(
+            self.image_output_directory / (timestamp + "_lined_" + self.image_name),
+            lined_image.astype(numpy.uint8))
 
         return self.image_output_directory / timestamp / "_lined_" / self.image_name
