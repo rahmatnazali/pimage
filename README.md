@@ -57,15 +57,3 @@ detect.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32)
 If _blockSize_ parameter was not given, the default value would be 32 (integer).
 
 You can also see directly at the [code](examples/example_01.py).
-
-## License
-This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE) file for details
-
-## Acknowledgments
-I mainly learnt how to do PCA on image using Python from [here](http://www.janeriksolem.net/2009/01/pca-for-images-using-python.html) written by Jan Erik Solem, but the page has been deleted. Shortly after knowing the page was gone, I found that the author are now founder & CEO at [Mapillary](https://www.mapillary.com/) (Hail, and hat tip).
-
-## Support
-
-Hi! I got piles email of thanks regarding how this code help them on their affairs or getting their Degree :) 
-
-Maintain the repository took time and effort, if you want to support me, please consider <a href="https://www.buymeacoffee.com/EyWFfgS" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
