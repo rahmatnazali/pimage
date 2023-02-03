@@ -51,6 +51,5 @@ def detect_and_export(input_path, output_path, block_size=32, verbose=False):
 
 if __name__ == "__main__":
     # example script
-    # detect('../../dataset/multi_paste/cattle_gcs500_copy_rb5.png', '../../output/', block_size=32)
-
-    detect_and_export('../../assets/dataset_example_blur.png', '../../output/', block_size=32)
+    # detect('../../dataset/multi_paste/cattle_gcs500_copy_rb5.png', block_size=32, , verbose=True)
+    detect_and_export('../../assets/dataset_example_blur.png', '../../output/', block_size=32, verbose=True)
