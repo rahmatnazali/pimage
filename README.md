@@ -11,17 +11,17 @@ The implementation generally manipulates overlapping blocks, and are constructed
 
 ### How do we modify them?
 
-We know that Duplication detection algorithm (Paper 1) has `coordinate` and `principal_component` features, and then on Robust detection algorithm (Paper 2) it has `coordinate` and `seven_features` mentioned inside the paper.
+We know that the first algorithm use `coordinate` and `principal_component` features, while the second algorithm use `coordinate` and `seven_features`.
 
-Knowing that, we then attempt to give a tolerance by adding all of the features like so:
+Knowing that, we then attempt to give a tolerance by merging all the features like so:
 
 ![Modification diagram](/assets/modification_diagram.PNG?raw=true) 
 
-and then sort it lexicoghrapically.
+The attributes are saved as one object and lexicographical sorting is applied to the pricipal component and the seven features.
 
-The principal component will bring similar block closer, while the seven features will also bring closer similar block that can't be detected by principal component (that are for example blurred).
+The principal component will bring similar block closer, while the seven features will back up the detection for a block that can't be detected by principal component due to being applied with post region duplication process (for example being blurred).
 
-By modifying the algorithms like mentioned above, this script will have a tolerance regarding variety of the input image (i.e. the result will be both smooth and robust, with a trade-off in run time)
+By doing so, the new algorithm will have a tolerance regarding variety of the input image. The detection result will be relatively smooth and accurate for any type of image, with a trade-off in run time as we basically run two algorithm.
 
 ## Example image
 ### Original image
