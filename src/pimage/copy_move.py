@@ -47,9 +47,3 @@ def detect_and_export(input_path, output_path, block_size=32, verbose=False):
     timestamp = time.strftime("%Y%m%d_%H%M%S")
     imageio.imwrite(output_path / (timestamp + "_" + filename), ground_truth_image)
     imageio.imwrite(output_path / (timestamp + "_lined_" + filename), result_image)
-
-
-if __name__ == "__main__":
-    # example script
-    # detect('../../dataset/multi_paste/cattle_gcs500_copy_rb5.png', block_size=32, , verbose=True)
-    detect_and_export('../../assets/dataset_example_blur.png', '../../output/', block_size=32, verbose=True)
