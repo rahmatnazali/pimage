@@ -41,10 +41,9 @@ Assuming you already have Python 3.x on your machine:
 ## Example
 
 ```python3
-from copy_move_detection import detect
-detect.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32)
+from pimage import copy_move
+
+copy_move.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32)
 ```
 
-If _blockSize_ parameter was not given, the default value would be 32 (integer).
-
-You can also see directly at the [code](example_01.py).
+You can also see directly at the [example code](example/example.py).
