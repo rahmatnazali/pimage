@@ -12,21 +12,21 @@ import time
 
 class ImageObject(object):
     """
-    Object to contains a single image, then detects a fraud in it
+    Object to contain single image, then detects a fraud in it
     """
 
     def __init__(self, input_path, image_name, output_directory, block_dimension):
         """
         Constructor to initialize the algorithm's parameters
-        :param input_path: direktori file citra
-        :param image_name: nama file citra
-        :param block_dimension: ukuran blok dimensi (ex:32, 64, 128)
-        :param output_directory: direktori untuk hasil deteksi
+        :param input_path: image input path
+        :param image_name: image name
+        :param block_dimension: block dimension (ex:32, 64, 128)
+        :param output_directory: output path
         :return: None
         """
 
         print(image_name)
-        print("Step 1 of 4: Object and variable initialization, ", end='')
+        print("Step 1 of 4: Object and variable initialization")
 
         # image parameter
         self.image_output_directory = output_directory
@@ -64,7 +64,7 @@ class ImageObject(object):
         self.t1 = 2.80
         self.t2 = 0.02
 
-        print(self.Nb, self.is_rgb_image)
+        print(f"Nb: {self.Nb}. Is RGB: {self.is_rgb_image}")
 
         # container initialization to later contains several data
         self.features_container = copy_move_detection.container.Container()
