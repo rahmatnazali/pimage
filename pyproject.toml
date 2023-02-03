@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pimage"
-version = "1.0.2"
+version = "1.0.3"
 keywords = ["image", "copy-move", "attack", "detection"]
 authors = [
   { name="Rahmat Nazali Salimi", email="rahmatnazali95@gmail.com" },
