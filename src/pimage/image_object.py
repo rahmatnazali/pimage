@@ -216,7 +216,7 @@ class ImageObject(object):
 
         # create an array as the canvas of the final image
         ground_truth_image = numpy.zeros((self.image_height, self.image_width))
-        lined_image = numpy.array(self.image_data.convert('RGB'))
+        result_image = numpy.array(self.image_data.convert('RGB'))
 
         sorted_offset = sorted(self.offset_dictionary,
                                key=lambda offset_key: len(self.offset_dictionary[offset_key]),
@@ -265,40 +265,40 @@ class ImageObject(object):
                     if ground_truth_image[x_coordinate - 1, y_coordinate] == 0 and \
                             ground_truth_image[x_coordinate, y_coordinate - 1] == 0 and \
                             ground_truth_image[x_coordinate - 1, y_coordinate - 1] == 0:
-                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
-                        lined_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
-                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                        result_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
+                        result_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                        result_image[x_coordinate - 2:x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
                     elif ground_truth_image[x_coordinate + 1, y_coordinate] == 0 and \
                             ground_truth_image[x_coordinate, y_coordinate - 1] == 0 and \
                             ground_truth_image[x_coordinate + 1, y_coordinate - 1] == 0:
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
-                        lined_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate - 2:y_coordinate, 1] = 255
+                        result_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
+                        result_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                        result_image[x_coordinate + 1:x_coordinate + 3, y_coordinate - 2:y_coordinate, 1] = 255
                     elif ground_truth_image[x_coordinate - 1, y_coordinate] == 0 and \
                             ground_truth_image[x_coordinate, y_coordinate + 1] == 0 and \
                             ground_truth_image[x_coordinate - 1, y_coordinate + 1] == 0:
-                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
-                        lined_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
-                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                        result_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
+                        result_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                        result_image[x_coordinate - 2:x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
                     elif ground_truth_image[x_coordinate + 1, y_coordinate] == 0 and \
                             ground_truth_image[x_coordinate, y_coordinate + 1] == 0 and \
                             ground_truth_image[x_coordinate + 1, y_coordinate + 1] == 0:
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
-                        lined_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                        result_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
+                        result_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                        result_image[x_coordinate + 1:x_coordinate + 3, y_coordinate + 1:y_coordinate + 3, 1] = 255
 
                     # creating the straigh line, respectively upper, down, left, right line
                     elif ground_truth_image[x_coordinate, y_coordinate + 1] == 0:
-                        lined_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
+                        result_image[x_coordinate, y_coordinate + 1:y_coordinate + 3, 1] = 255
                     elif ground_truth_image[x_coordinate, y_coordinate - 1] == 0:
-                        lined_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
+                        result_image[x_coordinate, y_coordinate - 2:y_coordinate, 1] = 255
                     elif ground_truth_image[x_coordinate - 1, y_coordinate] == 0:
-                        lined_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
+                        result_image[x_coordinate - 2:x_coordinate, y_coordinate, 1] = 255
                     elif ground_truth_image[x_coordinate + 1, y_coordinate] == 0:
-                        lined_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
+                        result_image[x_coordinate + 1:x_coordinate + 3, y_coordinate, 1] = 255
 
         return (
             fraud_pair_list,
             ground_truth_image.astype(numpy.uint8),
-            lined_image.astype(numpy.uint8),
+            result_image.astype(numpy.uint8),
         )
