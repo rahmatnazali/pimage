@@ -16,7 +16,7 @@ maintainers = [
   { name="Rahmat Nazali Salimi", email="rahmatnazali95@gmail.com" },
 ]
 description = "Library for detecting image copy-move attack"
-readme = "README.md"
+readme = "README_pypi.md"
 requires-python = ">=3.8.10"
 classifiers = [
     "Development Status :: 4 - Beta",
