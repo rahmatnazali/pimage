@@ -5,13 +5,9 @@ This project is part of our paper that [has been published at Springer](https://
 The project is formerly written with Python 2, which is now left unmaintained [here](https://github.com/rahmatnazali/image-copy-move-detection-python2).
 
 ## Description
-This is an implementation of python script to detect a copy-move manipulation attack on digital image based on Overlapping Blocks.
-
-This script is implemented with a modification of two algoritms publicated in a scientific journals:
-1. Duplication detection algorithm, taken from [Exposing Digital Forgeries by Detecting Duplicated Image Region](http://www.ists.dartmouth.edu/library/102.pdf) (old link is dead, go to [alternative link](https://www.semanticscholar.org/paper/Exposing-Digital-Forgeries-by-Detecting-Duplicated-Popescu-Farid/b888c1b19014fe5663fd47703edbcb1d6e4124ab)); Fast and smooth attack detection algorithm on digital image using [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and _post region duplication process_ (explained in the paper above)
-2. Robust detection algorithm, taken from [Robust Detection of Region-Duplication Forgery in Digital Image](http://ieeexplore.ieee.org/document/1699948/); Slower and having rough result attack detection algorithm but are considered robust towards noise and _post region duplication process_
-
-This project was used for my Undergraduate Thesis that you can find it in [here](http://repository.its.ac.id/1801/), but please note that it was written in Indonesian. Now it has been re-written as paper and published at Springer that you can find it [here](https://link.springer.com/chapter/10.1007%2F978-3-030-73689-7_39), feel free to cite!
+The implementation generally manipulates overlapping blocks, and are constructed based on two algorithms:
+1. Duplication detection algorithm, taken from [Exposing Digital Forgeries by Detecting Duplicated Image Region](http://www.ists.dartmouth.edu/library/102.pdf) ([alternative link](https://www.semanticscholar.org/paper/Exposing-Digital-Forgeries-by-Detecting-Duplicated-Popescu-Farid/b888c1b19014fe5663fd47703edbcb1d6e4124ab)); Fast and smooth attack detection algorithm on digital image using [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and any following manipulation that are being applied after the attack phase (in which they call it _post region duplication process_)
+2. Robust detection algorithm, taken from [Robust Detection of Region-Duplication Forgery in Digital Image](https://ieeexplore.ieee.org/document/1699948); Relatively slower process with rough result on the detection edge but are considered robust towards noise and _post region duplication process_
 
 ### How do we modify them?
 
