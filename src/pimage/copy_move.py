@@ -47,3 +47,5 @@ def detect_and_export(input_path, output_path=".", block_size=32, verbose=False)
     timestamp = time.strftime("%Y%m%d_%H%M%S")
     imageio.imwrite(output_path / (timestamp + "_" + filename), ground_truth_image)
     imageio.imwrite(output_path / (timestamp + "_lined_" + filename), result_image)
+
+    return fraud_list
