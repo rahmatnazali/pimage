@@ -6,8 +6,8 @@ import numpy
 from PIL import Image
 from tqdm import tqdm
 
-from block import Blocks
-from container import Container
+from . import block
+from . import container
 
 
 class ImageObject(object):
@@ -65,8 +65,8 @@ class ImageObject(object):
         self.t2 = 0.02
 
         # container initialization to later contains several data
-        self.features_container = Container()
-        self.block_pair_container = Container()
+        self.features_container = container.Container()
+        self.block_pair_container = container.Container()
         self.offset_dictionary = {}
 
     def run(self) -> Tuple[List, numpy.ndarray, numpy.ndarray]:
@@ -116,7 +116,7 @@ class ImageObject(object):
                     image_block_rgb = self.image_data.crop((i, j, i + self.block_dimension, j + self.block_dimension))
                     image_block_grayscale = self.image_grayscale.crop(
                         (i, j, i + self.block_dimension, j + self.block_dimension))
-                    image_block = Blocks(image_block_grayscale, image_block_rgb, i, j, self.block_dimension)
+                    image_block = block.Block(image_block_grayscale, image_block_rgb, i, j, self.block_dimension)
                     self.features_container.append_block(image_block.compute_block())
         else:
             for i in range(image_width_overlap + 1):
@@ -124,7 +124,7 @@ class ImageObject(object):
                     image_block_grayscale = self.image_data.crop(
                         (i, j, i + self.block_dimension, j + self.block_dimension)
                     )
-                    image_block = Blocks(image_block_grayscale, None, i, j, self.block_dimension)
+                    image_block = block.Block(image_block_grayscale, None, i, j, self.block_dimension)
                     self.features_container.append_block(image_block.compute_block())
 
     def sort(self):

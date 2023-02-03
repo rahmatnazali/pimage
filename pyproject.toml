@@ -1,10 +1,14 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = [
+    "setuptools>=61.0",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "pimage"
-version = "1.0.1"
+version = "1.0.5"
+keywords = ["image", "copy-move", "attack", "detection"]
 authors = [
   { name="Rahmat Nazali Salimi", email="rahmatnazali95@gmail.com" },
 ]
@@ -12,7 +16,7 @@ maintainers = [
   { name="Rahmat Nazali Salimi", email="rahmatnazali95@gmail.com" },
 ]
 description = "Library for detecting image copy-move attack"
-readme = "README.md"
+readme = "README_pypi.md"
 requires-python = ">=3.8.10"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -38,3 +42,16 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/rahmatnazali/pimage"
 "Bug Tracker" = "https://github.com/rahmatnazali/pimage/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pimage"]
+exclude = [
+    ".github",
+    "assets",
+    "dataset",
+    "example",
+    "output",
+    "venv"
+]
+namespaces = false
