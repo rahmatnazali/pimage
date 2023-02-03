@@ -33,4 +33,6 @@ def detect(input_path, output_path, block_size=32):
 
 if __name__ == "__main__":
     # example script
+    # detect('../../dataset/multi_paste/cattle_gcs500_copy_rb5.png', '../../output/', block_size=32)
+
     detect('../../assets/dataset_example_blur.png', '../../output/', block_size=32)
