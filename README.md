@@ -31,6 +31,8 @@ By doing so, the new algorithm will have a tolerance regarding variety of the in
 ### Example result after detection
 ![Result image](output/20191125_094809_lined_dataset_example_blur.png)
 
+Another example of the result can be seen in the `output` directory.
+
 ## Getting Started
 
 Assuming you already have Python 3.x on your machine:
