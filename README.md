@@ -47,4 +47,4 @@ detect.detect('assets/', 'dataset_example_blur.png', 'output/', block_size=32)
 
 If _blockSize_ parameter was not given, the default value would be 32 (integer).
 
-You can also see directly at the [code](examples/example_01.py).
+You can also see directly at the [code](example_01.py).
