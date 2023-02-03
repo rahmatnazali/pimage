@@ -27,7 +27,7 @@ def detect(input_path, block_size=32, verbose=False) -> Tuple[List, numpy.ndarra
     return single_image.run()
 
 
-def detect_and_export(input_path, output_path, block_size=32, verbose=False):
+def detect_and_export(input_path, output_path=".", block_size=32, verbose=False):
     """
     Detects an image under a specific directory and export the result into image file
     """
