@@ -1,5 +1,7 @@
-import numpy as np
+import numpy
+
 from sklearn.decomposition import PCA
+
 
 class Blocks(object):
     """
@@ -33,10 +35,11 @@ class Blocks(object):
         Create a representation of the image block
         :return: image block representation data
         """
-        block_data_list = []
-        block_data_list.append(self.coordinate)
-        block_data_list.append(self.compute_characteristic_features(precision=4))
-        block_data_list.append(self.compute_pca(precision=6))
+        block_data_list = [
+            self.coordinate,
+            self.compute_characteristic_features(precision=4),
+            self.compute_pca(precision=6)
+        ]
         return block_data_list
 
     def compute_pca(self, precision):
@@ -47,18 +50,18 @@ class Blocks(object):
         """
         pca_module = PCA(n_components=1)
         if self.is_image_rgb:
-            image_array = np.array(self.image_rgb)
+            image_array = numpy.array(self.image_rgb)
             red_feature = image_array[:, :, 0]
             green_feature = image_array[:, :, 1]
             blue_feature = image_array[:, :, 2]
 
-            concatenated_array = np.concatenate((red_feature, np.concatenate((green_feature, blue_feature), axis=0)), axis=0)
+            concatenated_array = numpy.concatenate((red_feature, numpy.concatenate((green_feature, blue_feature), axis=0)), axis=0)
             pca_module.fit_transform(concatenated_array)
             principal_components = pca_module.components_
             precise_result = [round(element, precision) for element in list(principal_components.flatten())]
             return precise_result
         else:
-            image_array = np.array(self.image_grayscale)
+            image_array = numpy.array(self.image_grayscale)
             pca_module.fit_transform(image_array)
             principal_components = pca_module.components_
             precise_result = [round(element, precision) for element in list(principal_components.flatten())]
