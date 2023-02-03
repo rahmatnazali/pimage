@@ -1,5 +1,5 @@
 numpy==1.24.1
-sklearn==0.0.post1
+scikit-learn==1.2.1
 tqdm==4.64.1
 Pillow==9.4.0
 imageio==2.25.0
