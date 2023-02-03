@@ -23,16 +23,16 @@ The principal component will bring similar block closer, while the seven feature
 
 By doing so, the new algorithm will have a tolerance regarding variety of the input image. The detection result will be relatively smooth and accurate for any type of image, with a trade-off in run time as we basically run two algorithm.
 
-## Getting Started
+## Using the package
 
-Assuming you already have Python 3.x on your machine:
-- clone this repo
-- create a [virtual environment](https://docs.python.org/3/library/venv.html) and enter into it
-- run `pip3 install -r requirements.txt`
-
-## Example usage
+To install the package, simply hit it with pip: `pip3 install pimage`
 
 ### API for the detection process
+
+- The API for detection process is provided via `copy_move.detect(image_path, block_size)` method. 
+- Determining the `block_size`: The first algorithm use block size of `32` pixels so this package will use the same value by default. Increasing the size means faster run time at a reduced accuracy. Analogically, decreasing the size means longer run time with increased accuracy.
+
+For example:
 
 ```python3
 from pimage import copy_move
@@ -40,7 +40,7 @@ from pimage import copy_move
 fraud_list, ground_truth_image, result_image = copy_move.detect("dataset_example_blur.png", block_size=32)
 ```
 
-- `fraud_list` will be the list of `(x_coordinate, y_coordinate)` and the number of the blocks. If the list is not empty, we can assume that the image is being tampered. For example:
+- `fraud_list` will be the list of `(x_coordinate, y_coordinate)` of the blocks group and the total number of the blocks it is formed with. If this list is not empty, we can assume that the image is being tampered. For example:
     ```
     ((-57, -123), 2178)
     ((-11, 140), 2178)
@@ -48,11 +48,11 @@ fraud_list, ground_truth_image, result_image = copy_move.detect("dataset_example
     ((-34, -305), 2178)
     ((-37, 148), 2178)
     ```
-  means there are 5 possible matched/identical region with 2178 overlapping blocks on each of it
-- `ground_truth_image` contains the black and white ground truth of the detection result
-- `result_image` is the given image where the possible fraud region will be bordered (if any)
+  the above output means there are 5 possible matched/identical region with 2178 overlapping blocks on each of it
+- `ground_truth_image` contains the black and white ground truth of the detection result. This is useful for comparing accuracy, MSE, etc with the ground truth from the dataset
+- `result_image` is the given image where the possible fraud region will be color-bordered (if any)
 
-`ground_truth_image` and `result_image` will be formatted as `numpy.ndarray`. It can further be processed. For example, it can be exported as image like so:
+`ground_truth_image` and `result_image` will be formatted as `numpy.ndarray`. It can further be processed as needed. For example, it can be programmatically modified and then exported later as image like so:
 
 ```python
 import imageio
@@ -71,16 +71,14 @@ from pimage import copy_move
 copy_move.detect_and_export('dataset_example_blur.png', 'output', block_size=32)
 ```
 
-## Determining the `block_size`
-
-The first algorithm use block size of `32` pixels so this package will use the same value by default. Increasing the size means faster run time at a reduced accuracy. Analogically, decreasing the size means longer run time with increased accuracy.
+this code will save the `ground_truth_image` and `result_image` inside `output` folder.
 
 ## Verbose mode
 
 When running `copy_move.detect()` or `copy_move.detect_and_export()`, you can pass `verbose=True` to output 
-the status of each step. The default value will be `False` and nothing will be printed.
+the status of each step. The default value will be `False` so nothing will be printed.
 
-Example of the verbose output:
+Example output when verbose mode is being enabled:
 
 ```
 Processing: dataset/multi_paste/cattle_gcs500_copy_rb5.png
@@ -104,11 +102,13 @@ Total time    : 0:04:17 second
 ```
 
 ## Example image
-### Original image
+
+All the result of the dataset should be inside `output` directory of this repository.
+
+The image shown is ordered as: original, attacked, and the resulting detection image.
+
+#### Horse dataset
 ![Original image](assets/dataset_example.png?raw=true) 
-### Forgered image
 ![Forgered image](assets/dataset_example_blur.png?raw=true)
-### Example result after detection
 ![Result image](output/20191125_094809_lined_dataset_example_blur.png)
 
-Another example of the result can be seen in the `output` directory.
