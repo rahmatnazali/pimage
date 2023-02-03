@@ -6,7 +6,7 @@ The project is formerly written with Python 2 for our Undergraduate Thesis, whic
 
 ## Description
 The implementation generally manipulates overlapping blocks, and are constructed based on two algorithms:
-1. Duplication detection algorithm, taken from [Exposing Digital Forgeries by Detecting Duplicated Image Region](http://www.ists.dartmouth.edu/library/102.pdf) ([alternative link](https://www.semanticscholar.org/paper/Exposing-Digital-Forgeries-by-Detecting-Duplicated-Popescu-Farid/b888c1b19014fe5663fd47703edbcb1d6e4124ab)); Fast and smooth attack detection algorithm on digital image using [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and any following manipulation that are being applied after the attack phase (in which they call it _post region duplication process_)
+1. Duplication detection algorithm, taken from [Exposing Digital Forgeries by Detecting Duplicated Image Region](http://www.ists.dartmouth.edu/library/102.pdf) ([alternative link](https://www.semanticscholar.org/paper/Exposing-Digital-Forgeries-by-Detecting-Duplicated-Popescu-Farid/b888c1b19014fe5663fd47703edbcb1d6e4124ab)); Fast and smooth attack detection algorithm on digital image using [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and any following manipulations that are being applied after the attack phase (in which they call it _post region duplication process_)
 2. Robust detection algorithm, taken from [Robust Detection of Region-Duplication Forgery in Digital Image](https://ieeexplore.ieee.org/document/1699948); Relatively slower process with rough result on the detection edge but are considered robust towards noise and _post region duplication process_
 
 ### How do we modify them?
@@ -17,7 +17,7 @@ Knowing that, we then attempt to give a tolerance by merging all the features li
 
 ![Modification diagram](assets/modification_diagram.PNG?raw=true) 
 
-The attributes are saved as one object and lexicographical sorting is applied to the pricipal component and the seven features.
+The attributes are saved as one object. Then a lexicographical sorting is applied to the principal component and the seven features.
 
 The principal component will bring similar block closer, while the seven features will back up the detection for a block that can't be detected by principal component due to being applied with post region duplication process (for example being blurred).
 
