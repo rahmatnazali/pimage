@@ -95,7 +95,7 @@ class ImageObject(object):
             total_running_time_in_second = timestamp_after_image_creation - start_timestamp
             total_minute, total_second = divmod(total_running_time_in_second, 60)
             total_hour, total_minute = divmod(total_minute, 60)
-            print("Total time    : %d:%02d:%02d second" % (total_hour, total_minute, total_second), '\n')
+            print("Total time      : %d:%02d:%02d second" % (total_hour, total_minute, total_second), '\n')
 
         return detection_result
 
