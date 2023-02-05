@@ -2,6 +2,7 @@ This is a python package for detecting copy-move attack on a digital image.
 
 This project is part of our paper that [has been published at Springer](https://link.springer.com/chapter/10.1007%2F978-3-030-73689-7_39). More detailed theories and steps are explained there.
 
+
 ## Using the package
 
 To install the package, simply hit it with pip: `pip3 install pimage`. Example script for using this package is also provided [here](https://github.com/rahmatnazali/pimage-example).
@@ -80,6 +81,7 @@ Image creation : 1.4 second
 Total time    : 0:04:17 second 
 ```
 
+
 ## The algorithm
 The implementation generally manipulates overlapping blocks, and are constructed based on two algorithms:
 1. Duplication detection algorithm, taken from [Exposing Digital Forgeries by Detecting Duplicated Image Region](http://www.ists.dartmouth.edu/library/102.pdf) ([alternative link](https://www.semanticscholar.org/paper/Exposing-Digital-Forgeries-by-Detecting-Duplicated-Popescu-Farid/b888c1b19014fe5663fd47703edbcb1d6e4124ab)); Fast and smooth attack detection algorithm on digital image using [principal component analysis](https://en.wikipedia.org/wiki/Principal_component_analysis), but sensitive to noise and any following manipulations that are being applied after the attack phase (in which they call it _post region duplication process_)
@@ -110,6 +112,21 @@ The image shown is ordered as: original, attacked, and the resulting detection i
 ![Original image](assets/dataset_example.png?raw=true) 
 ![Forgered image](assets/dataset_example_blur.png?raw=true)
 ![Result image](output/20191125_094809_lined_dataset_example_blur.png)
+
+#### Cattle dataset
+![Original image](dataset/orig/cattle.png) 
+![Forgered image](dataset/multi_paste/cattle_gcs500_copy_rb5.png)
+![Result image](output/20230203_110136_lined_cattle_gcs500_copy_rb5.png)
+
+#### Clean walls dataset
+![Original image](dataset/orig/clean_walls.png) 
+![Forgered image](dataset/multi_paste/clean_walls_gcs500_copy_rb5.png)
+![Result image](output/20230205_093534_lined_clean_walls_gcs500_copy_rb5.png)
+
+#### Knight moves dataset
+![Original image](dataset/orig/knight_moves.png) 
+![Forgered image](dataset/multi_paste/knight_moves_gcs500_copy_rb5.png)
+![Result image](output/20230205_101112_lined_knight_moves_gcs500_copy_rb5.png)
 
 ## Additional note
 
