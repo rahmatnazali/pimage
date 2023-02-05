@@ -17,10 +17,6 @@ maintainers = [
 ]
 description = "Library for detecting image copy-move attack"
 readme = "README-PYPI.md"
-license-files = [
-    "LICENSE-APACHE",
-    "LICENSE-MIT",
-]
 requires-python = ">=3.8.10"
 classifiers = [
     "Development Status :: 4 - Beta",
