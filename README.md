@@ -19,7 +19,7 @@ from pimage import copy_move
 fraud_list, ground_truth_image, result_image = copy_move.detect("dataset_example_blur.png", block_size=32)
 ```
 
-- `fraud_list` will be the list of `(x_coordinate, y_coordinate)` of the blocks group and the total number of the blocks it is formed with. If this list is not empty, we can assume that the image is being tampered. For example:
+- `fraud_list` will be the list of `(x_coordinate, y_coordinate)` of the blocks group and the total number of the blocks it is formed with. If this list is not empty, we can assume that the image is being tampered. For example, running the [cattle dataset](dataset/multi_paste/cattle_gcs500_copy_rb5.png) with 32 px of block size will result in:
     ```
     ((-57, -123), 2178)
     ((-11, 140), 2178)
