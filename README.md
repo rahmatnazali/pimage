@@ -95,7 +95,7 @@ Knowing that, we then attempt to give a tolerance by merging all the features li
 
 ![Modification diagram](assets/modification_diagram.PNG?raw=true) 
 
-The attributes are saved as one object. Then a lexicographical sorting is applied to the principal component and the seven features.
+The attributes are saved as one object. A lexicographical sorting is then applied to the principal component and the seven features.
 
 The principal component will bring similar block closer, while the seven features will back up the detection for a block that can't be detected by principal component due to being applied with post region duplication process (for example being blurred).
 
