@@ -7,18 +7,40 @@ This project is part of our paper that [has been published at Springer](https://
 
 To install the package, simply hit it with pip: `pip3 install pimage`. Example script for using this package is also provided [here](https://github.com/rahmatnazali/pimage-example).
 
-### API for the detection process
+### Configuring the algorithm
 
-- The API for detection process is provided via `copy_move.detect(image_path, block_size)` method. 
+The algorithm can be dynamically configured with `Configuration` class. If omitted, the default value from both of the paper will be used. 
+The default value and description for each of the parameter is detailed on [configuration.py](src/pimage/configuration.py).
+
+```python
+from pimage.configuration import Configuration
+
+conf = Configuration(
+    block_size=32,
+    nn=2,
+    nf=188,
+    nd=50,
+    p=(1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125),
+    t1=2.80,
+    t2=0.02
+)
+```
+
 - Determining the `block_size`: The first algorithm use block size of `32` pixels so this package will use the same value by default. Increasing the size means faster run time at a reduced accuracy. Analogically, decreasing the size means longer run time with increased accuracy.
 
-For example:
 
-```python3
-from pimage import copy_move
+### API for the detection process
 
-fraud_list, ground_truth_image, result_image = copy_move.detect("dataset_example_blur.png", block_size=32)
-```
+- The API for detection process is provided via `copy_move.detect()` method. For example:
+
+  ```python3
+  from pimage import copy_move
+  from pimage.configuration import Configuration
+  
+  conf = Configuration(block_size=32)
+  
+  fraud_list, ground_truth_image, result_image = copy_move.detect("dataset_example_blur.png", configuration=conf)
+  ```
 
 - `fraud_list` will be the list of `(x_coordinate, y_coordinate)` of the blocks group and the total number of the blocks it is formed with. If this list is not empty, we can assume that the image is being tampered. For example, running the [cattle dataset](dataset/multi_paste/cattle_gcs500_copy_rb5.png) with 32 px of block size will result in:
     ```
@@ -48,7 +70,7 @@ To quickly run the detection command for your image, the `copy_move.detect_and_e
 ```python
 from pimage import copy_move
 
-copy_move.detect_and_export('dataset_example_blur.png', 'output', block_size=32)
+copy_move.detect_and_export('dataset_example_blur.png', 'output')
 ```
 
 this code will save the `ground_truth_image` and `result_image` inside `output` folder.
@@ -95,7 +117,7 @@ Knowing that, we then attempt to give a tolerance by merging all the features li
 
 ![Modification diagram](assets/modification_diagram.PNG?raw=true) 
 
-The attributes are saved as one object. Then a lexicographical sorting is applied to the principal component and the seven features.
+The attributes are saved as one object. A lexicographical sorting is then applied to the principal component and the seven features.
 
 The principal component will bring similar block closer, while the seven features will back up the detection for a block that can't be detected by principal component due to being applied with post region duplication process (for example being blurred).
 

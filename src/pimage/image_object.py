@@ -8,6 +8,7 @@ from tqdm import tqdm
 
 from . import block
 from . import container
+from .configuration import Configuration
 
 
 class ImageObject(object):
@@ -15,7 +16,7 @@ class ImageObject(object):
     Object to contain single image and the detection process
     """
 
-    def __init__(self, input_path, block_dimension, verbose=False):
+    def __init__(self, input_path: str, configuration: Configuration, verbose=False):
         """
         Constructor to initialize the algorithm's parameters
         :param input_path: image input path
@@ -52,12 +53,11 @@ class ImageObject(object):
 
         # algorithm's parameters from the first paper
         self.N = self.image_width * self.image_height
-        self.block_dimension = block_dimension
-        self.b = self.block_dimension * self.block_dimension
+        self.block_dimension = configuration.block_dimension
         self.Nb = (self.image_width - self.block_dimension + 1) * (self.image_height - self.block_dimension + 1)
-        self.Nn = 2  # amount of neighboring block to be evaluated
-        self.Nf = 188  # minimum treshold of the offset's frequency
-        self.Nd = 50  # minimum treshold of the offset's magnitude
+        self.Nn = configuration.nn
+        self.Nf = configuration.nf
+        self.Nd = configuration.nd
 
         # algorithm's parameters from the second paper
         self.P = (1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125)
