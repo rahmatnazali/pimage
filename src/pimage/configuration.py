@@ -1,16 +1,16 @@
 from typing import Tuple
 
 
-class Configuration:
-    def __int__(self,
-                block_size: int = 32,
-                nn: int = 2,
-                nf: int = 188,
-                nd: int = 50,
-                p: Tuple[int] = (1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125),
-                t1: float = 2.80,
-                t2: float = 0.02
-                ):
+class Configuration(object):
+    def __init__(self,
+                 block_size: int = 32,
+                 nn: int = 2,
+                 nf: int = 188,
+                 nd: int = 50,
+                 p: Tuple[int] = (1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125),
+                 t1: float = 2.80,
+                 t2: float = 0.02
+                 ):
         """
         Object to contain the configuration parameter.
 
