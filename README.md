@@ -9,7 +9,8 @@ To install the package, simply hit it with pip: `pip3 install pimage`. Example s
 
 ### Configuring the algorithm
 
-The algorithm can be dynamically configured with `Configuration` class. If omitted, the default value from both of the paper will be used:
+The algorithm can be dynamically configured with `Configuration` class. If omitted, the default value from both of the paper will be used. 
+The default value and description for each of the parameter is detailed on [configuration.py](src/pimage/configuration.py).
 
 ```python
 from pimage.configuration import Configuration
