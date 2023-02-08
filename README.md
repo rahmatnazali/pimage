@@ -17,7 +17,7 @@ For example:
 ```python3
 from pimage import copy_move
 
-fraud_list, ground_truth_image, result_image = copy_move.detect("dataset_example_blur.png", block_size=32)
+fraud_list, ground_truth_image, result_image = copy_move.detect("dataset_example_blur.png")
 ```
 
 - `fraud_list` will be the list of `(x_coordinate, y_coordinate)` of the blocks group and the total number of the blocks it is formed with. If this list is not empty, we can assume that the image is being tampered. For example, running the [cattle dataset](dataset/multi_paste/cattle_gcs500_copy_rb5.png) with 32 px of block size will result in:
@@ -48,7 +48,7 @@ To quickly run the detection command for your image, the `copy_move.detect_and_e
 ```python
 from pimage import copy_move
 
-copy_move.detect_and_export('dataset_example_blur.png', 'output', block_size=32)
+copy_move.detect_and_export('dataset_example_blur.png', 'output')
 ```
 
 this code will save the `ground_truth_image` and `result_image` inside `output` folder.
