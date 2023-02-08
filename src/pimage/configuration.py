@@ -7,7 +7,11 @@ class Configuration(object):
                  nn: int = 2,
                  nf: int = 188,
                  nd: int = 50,
-                 p: Tuple[int] = (1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125),
+                 p: Tuple[
+                     float, float, float, float, float, float, float
+                 ] = (
+                         1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125
+                 ),
                  t1: float = 2.80,
                  t2: float = 0.02
                  ):
