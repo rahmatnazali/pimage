@@ -11,13 +11,28 @@ class Configuration:
                 t1: float = 2.80,
                 t2: float = 0.02
                 ):
+        """
+        Object to contain the configuration parameter.
+
+        Args:
+            block_size (int): The block size of the image pointer (eg. 32, 64, 128).
+                The smaller the block size, the more accurate the result is, but takes more time, vice versa.
+            nn (int): The amount of neighboring block to be evaluated (Nn)
+            nf (int): Minimum threshold of the offset's frequency (Nf)
+            nd (int): Minimum threshold of the offset's magnitude (Nd)
+            p (int): todo: elaborate this according to the second paper
+            t1 (int): todo: elaborate this according to the second paper
+            t2 (int): todo: elaborate this according to the second paper
+
+        Returns: None
+        """
 
         self.block_dimension = block_size
 
         # first algorithm parameter
-        self.nn = nn  # Nn: amount of neighboring block to be evaluated
-        self.nf = nf  # Nf: minimum threshold of the offset's frequency
-        self.nd = nd  # Nd: minimum threshold of the offset's magnitude
+        self.nn = nn
+        self.nf = nf
+        self.nd = nd
 
         # second algorithm parameter
         self.p = p
