@@ -42,7 +42,7 @@ class Block(object):
         ]
         return block_data_list
 
-    def compute_pca(self, precision):
+    def compute_pca(self, precision=6):
         """
         Compute Principal Component Analysis from the image block
         :param precision: characteristic features precision
@@ -79,7 +79,7 @@ class Block(object):
             precise_result = [round(element, precision) for element in list(principal_components.flatten())]
             return precise_result
 
-    def compute_characteristic_features(self, precision):
+    def compute_characteristic_features(self, precision=4):
         """
         Compute 7 characteristic features from every image blocks
         :param precision: feature characteristic precision
