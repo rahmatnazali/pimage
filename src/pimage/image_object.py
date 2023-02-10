@@ -194,8 +194,8 @@ class ImageObject(object):
                                                 # compute the pair's magnitude
                                                 magnitude = numpy.sqrt(math.pow(offset[0], 2) + math.pow(offset[1], 2))
                                                 if magnitude >= self.Nd:
-                                                    return 1, offset
-        return 0,
+                                                    return True, offset
+        return False, None
 
     def add_dictionary(self, first_coordinate, second_coordinate, pair_offset):
         """
