@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy
 
 from sklearn.decomposition import PCA
@@ -42,13 +44,14 @@ class Block(object):
         ]
         return block_data_list
 
-    def compute_pca(self, precision=6):
+    def compute_pca(self, n_components: int = 1, precision: int = 6) -> List[float]:
         """
         Compute Principal Component Analysis from the image block
+        :param n_components: the number of resulting PCA component
         :param precision: characteristic features precision
         :return: Principal Component from the image block
         """
-        pca_module = PCA(n_components=1)
+        pca_module = PCA(n_components=n_components)
         if self.is_image_rgb:
             image_array = numpy.array(self.image_rgb)
             red_feature = image_array[:, :, 0]
