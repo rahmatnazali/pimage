@@ -82,7 +82,7 @@ class Block(object):
             precise_result = [round(element, precision) for element in list(principal_components.flatten())]
             return precise_result
 
-    def compute_characteristic_features(self, precision=4):
+    def compute_characteristic_features(self, precision=4) -> List:
         """
         Compute 7 characteristic features from every image blocks
         :param precision: feature characteristic precision
@@ -151,6 +151,16 @@ class Block(object):
                     c7_part1 += self.image_grayscale_pixels[x_coordinate, y_coordinate]
                 else:
                     c7_part2 += self.image_grayscale_pixels[x_coordinate, y_coordinate]
+
+        # Prevents ZeroDivisionError with unusually black/white image (usually when testing)
+        if c4_part1 + c4_part2 == 0:
+            c4_part2 = 1
+        if c5_part1 + c5_part2 == 0:
+            c5_part2 = 1
+        if c6_part1 + c6_part2 == 0:
+            c6_part2 = 1
+        if c7_part1 + c7_part2 == 0:
+            c7_part2 = 1
 
         characteristic_feature_list.append(float(c4_part1) / float(c4_part1 + c4_part2))
         characteristic_feature_list.append(float(c5_part1) / float(c5_part1 + c5_part2))
