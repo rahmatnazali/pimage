@@ -13,8 +13,8 @@ class Block(object):
         Initializing the input image
         :param grayscale_image_block: grayscale image block
         :param rgb_image_block: rgb image block
-        :param x_coordinate: x coordinate (upper-left)
-        :param y_coordinate: y coordinate (upper-left)
+        :param x_coordinate: x coordinate (from upper-left)
+        :param y_coordinate: y coordinate (from upper-left)
         :return: None
         """
         self.image_grayscale = grayscale_image_block  # block of grayscale image
