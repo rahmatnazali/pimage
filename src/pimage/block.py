@@ -152,7 +152,7 @@ class Block(object):
                 else:
                     c7_part2 += self.image_grayscale_pixels[x_coordinate, y_coordinate]
 
-        # Prevents ZeroDivisionError with unusually black/white image (usually when testing)
+        # Prevents ZeroDivisionError with unusual black/white image (usually when testing)
         if c4_part1 + c4_part2 == 0:
             c4_part2 = 1
         if c5_part1 + c5_part2 == 0:
