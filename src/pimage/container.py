@@ -18,13 +18,13 @@ class Container(object):
         """
         return self.container.__len__()
 
-    def append_block(self, newData):
+    def append_block(self, block):
         """
         Insert a data block to the container
-        :param newData: data to be inserted into the block
+        :param block: data to be inserted into the container
         :return: None
         """
-        self.container.append(newData)
+        self.container.append(block)
         return
 
     def sort_by_features(self):

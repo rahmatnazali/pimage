@@ -147,11 +147,11 @@ class ImageObject(object):
 
         for i in tqdm(range(feature_container_length - 1), disable=not self.verbose):
             j = i + 1
-            result = self.is_valid(i, j)
-            if result[0]:
+            is_valid, offset = self.is_valid(i, j)
+            if is_valid:
                 self.add_dictionary(self.features_container.container[i][0],
                                     self.features_container.container[j][0],
-                                    result[1])
+                                    offset)
                 z += 1
 
     def is_valid(self, first_block, second_block):
@@ -194,8 +194,8 @@ class ImageObject(object):
                                                 # compute the pair's magnitude
                                                 magnitude = numpy.sqrt(math.pow(offset[0], 2) + math.pow(offset[1], 2))
                                                 if magnitude >= self.Nd:
-                                                    return 1, offset
-        return 0,
+                                                    return True, offset
+        return False, None
 
     def add_dictionary(self, first_coordinate, second_coordinate, pair_offset):
         """

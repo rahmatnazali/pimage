@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy
 
 from sklearn.decomposition import PCA
@@ -13,8 +15,8 @@ class Block(object):
         Initializing the input image
         :param grayscale_image_block: grayscale image block
         :param rgb_image_block: rgb image block
-        :param x_coordinate: x coordinate (upper-left)
-        :param y_coordinate: y coordinate (upper-left)
+        :param x_coordinate: x coordinate (from upper-left)
+        :param y_coordinate: y coordinate (from upper-left)
         :return: None
         """
         self.image_grayscale = grayscale_image_block  # block of grayscale image
@@ -42,13 +44,14 @@ class Block(object):
         ]
         return block_data_list
 
-    def compute_pca(self, precision):
+    def compute_pca(self, n_components: int = 1, precision: int = 6) -> List[float]:
         """
         Compute Principal Component Analysis from the image block
+        :param n_components: the number of resulting PCA component
         :param precision: characteristic features precision
         :return: Principal Component from the image block
         """
-        pca_module = PCA(n_components=1)
+        pca_module = PCA(n_components=n_components)
         if self.is_image_rgb:
             image_array = numpy.array(self.image_rgb)
             red_feature = image_array[:, :, 0]
@@ -79,7 +82,7 @@ class Block(object):
             precise_result = [round(element, precision) for element in list(principal_components.flatten())]
             return precise_result
 
-    def compute_characteristic_features(self, precision):
+    def compute_characteristic_features(self, precision=4) -> List:
         """
         Compute 7 characteristic features from every image blocks
         :param precision: feature characteristic precision
@@ -148,6 +151,16 @@ class Block(object):
                     c7_part1 += self.image_grayscale_pixels[x_coordinate, y_coordinate]
                 else:
                     c7_part2 += self.image_grayscale_pixels[x_coordinate, y_coordinate]
+
+        # Prevents ZeroDivisionError with unusual black/white image (usually when testing)
+        if c4_part1 + c4_part2 == 0:
+            c4_part2 = 1
+        if c5_part1 + c5_part2 == 0:
+            c5_part2 = 1
+        if c6_part1 + c6_part2 == 0:
+            c6_part2 = 1
+        if c7_part1 + c7_part2 == 0:
+            c7_part2 = 1
 
         characteristic_feature_list.append(float(c4_part1) / float(c4_part1 + c4_part2))
         characteristic_feature_list.append(float(c5_part1) / float(c5_part1 + c5_part2))
