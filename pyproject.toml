@@ -34,7 +34,7 @@ classifiers = [
 ]
 dependencies = [
   "numpy==1.24.1",
-  "scikit-learn==1.2.1",
+  "scikit-learn==1.5.0",
   "tqdm==4.66.3",
   "Pillow==10.3.0",
   "imageio==2.25.0",
